@@ -1,0 +1,1 @@
+<section class="hero"><span class="eyebrow">404</span><h1>Page not found.</h1><p>The route you requested does not exist.</p><a class="button" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">Go home</a></section>

@@ -1,0 +1,4 @@
+logs/*.log
+cache/rate_limits/*.json
+!logs/.gitkeep
+!cache/.gitkeep

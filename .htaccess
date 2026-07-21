@@ -1,0 +1,10 @@
+Options -Indexes
+RewriteEngine On
+
+# Send every public request through the public directory while keeping
+# "/public" out of the browser URL.
+RewriteCond %{THE_REQUEST} \s/+(.*/)?public(?:[/\s?]) [NC]
+RewriteRule ^public(?:/.*)?$ - [R=404,L]
+RewriteRule ^(?:app|bootstrap|config|database|routes|storage)(?:/|$) - [F,L,NC]
+RewriteRule ^public/ - [L]
+RewriteRule ^(.*)$ public/$1 [L]
