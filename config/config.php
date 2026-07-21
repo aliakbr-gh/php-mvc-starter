@@ -7,6 +7,12 @@ return [
     'debug' => filter_var(getenv('APP_DEBUG') ?: 'true', FILTER_VALIDATE_BOOL),
     'timezone' => getenv('APP_TIMEZONE') ?: 'Asia/Karachi',
 
+    'branding' => [
+        // Path is relative to the public directory. Use null to hide the logo.
+        'logo_path' => 'assets/images/logo.svg',
+        'logo_alt' => getenv('APP_NAME') ?: 'Core MVC',
+    ],
+
     'session' => [
         'name' => 'coremvc_session',
     ],

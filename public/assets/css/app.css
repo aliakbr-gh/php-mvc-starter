@@ -27,6 +27,18 @@ td strong,td small { display:block; } td strong { color:#1e293b; } td small { ma
 .form-actions { display:flex; align-items:center; gap:18px; margin-top:4px; }.form-actions a { color:#64748b; font-size:.875rem; font-weight:700; text-decoration:none; }
 @media (max-width:750px) { .module-head { align-items:flex-start; flex-direction:column; }.table-filters { grid-template-columns:1fr; }.pagination-wrap { align-items:flex-start; flex-direction:column; }.form-grid,.permission-grid { grid-template-columns:1fr; }.admin-form { padding:20px; } }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+
 * {
   box-sizing: border-box;
 }

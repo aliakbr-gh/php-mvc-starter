@@ -3,12 +3,14 @@
 declare(strict_types=1);
 
 use App\Core\Application;
+use App\Core\Config;
 use App\Core\Logger;
 
 require BASE_PATH . '/app/Core/Autoloader.php';
 require BASE_PATH . '/app/Core/helpers.php';
 
 $config = require BASE_PATH . '/config/config.php';
+Config::load($config);
 date_default_timezone_set($config['timezone']);
 
 if (session_status() !== PHP_SESSION_ACTIVE) {

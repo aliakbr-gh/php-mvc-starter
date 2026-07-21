@@ -9,6 +9,9 @@ modules.
 The project does not use Composer, a framework, Tailwind, Bootstrap, or another
 external package. The interface is built with local CSS and JavaScript.
 
+For a focused explanation of the route → controller → model → view development
+workflow, read `Project.md`.
+
 ## Features
 
 - PHP 8.1+ with strict types
@@ -117,6 +120,20 @@ APP_NAME
 APP_DEBUG
 APP_TIMEZONE
 ```
+
+Application name and branding are configured once in `config/config.php`:
+
+```php
+'name' => getenv('APP_NAME') ?: 'Core MVC',
+'branding' => [
+    'logo_path' => 'assets/images/logo.svg',
+    'logo_alt' => getenv('APP_NAME') ?: 'Core MVC',
+],
+```
+
+Page titles use `Page - APP_NAME`, for example `Login - Core MVC`. Set
+`branding.logo_path` to a path relative to `public/`, or set it to `null` to hide
+the logo.
 
 Supported database variables:
 
