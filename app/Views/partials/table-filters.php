@@ -1,10 +1,26 @@
-<form class="table-filters" method="get" action="<?= htmlspecialchars(url($baseUrl), ENT_QUOTES, 'UTF-8') ?>">
-    <input class="form-control" type="search" name="search"
-           value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search…">
-    <select class="form-select" name="per_page" onchange="this.form.submit()" aria-label="Items per page">
-        <?php foreach ([10, 25, 50] as $size): ?>
-            <option value="<?= $size ?>" <?= $perPage === $size ? 'selected' : '' ?>><?= $size ?> per
-            page</option><?php endforeach; ?>
-    </select>
-    <button class="btn btn-secondary" type="submit">Search</button>
+<form class="row g-2 align-items-center justify-content-between mb-3" method="get"
+      action="<?= htmlspecialchars(url($baseUrl), ENT_QUOTES, 'UTF-8') ?>">
+    <div class="col-12 col-md-auto">
+        <div class="input-group">
+            <input class="form-control" type="search" name="search"
+                   value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>"
+                   placeholder="Search records…" aria-label="Search records">
+            <button class="btn btn-primary" type="submit">Search</button>
+            <?php if ($search !== ''): ?>
+                <a class="btn btn-outline-secondary"
+                   href="<?= htmlspecialchars(url($baseUrl) . '?' . http_build_query(['per_page' => $perPage]), ENT_QUOTES, 'UTF-8') ?>">Clear</a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="col-12 col-md-auto ms-md-auto">
+        <div class="input-group">
+            <label class="input-group-text" for="per-page">Show</label>
+            <select class="form-select" id="per-page" name="per_page" onchange="this.form.submit()">
+                <?php foreach ([10, 25, 50] as $size): ?>
+                    <option value="<?= $size ?>" <?= $perPage === $size ? 'selected' : '' ?>><?= $size ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="input-group-text">per page</span>
+        </div>
+    </div>
 </form>

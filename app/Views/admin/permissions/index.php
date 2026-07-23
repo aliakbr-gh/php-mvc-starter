@@ -8,8 +8,9 @@ require BASE_PATH . '/app/Views/partials/admin-header.php';
 $baseUrl = 'admin/permissions';
 require BASE_PATH . '/app/Views/partials/table-filters.php';
 ?>
-<div class="table-card table-responsive">
-    <table class="table table-striped table-hover table-bordered align-middle mb-0 data-table">
+<div class="card table-card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0 data-table">
         <thead>
         <tr>
             <th>Permission</th>
@@ -43,5 +44,6 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
         <?php endforeach; ?>
         </tbody>
     </table>
+  </div>
 </div>
 <?php require BASE_PATH . '/app/Views/partials/pagination.php'; ?>

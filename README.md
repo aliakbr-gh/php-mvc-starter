@@ -6,8 +6,8 @@ authentication, role-based access control, database activity history, global rat
 limiting, daily file logs, CSRF protection, toast notifications, and searchable CRUD
 modules.
 
-The project does not use Composer, a framework, Tailwind, Bootstrap, or another
-external package. The interface is built with local CSS and JavaScript.
+The project does not use Composer or a backend framework. The interface uses
+Bootstrap 5 components with a small local CSS and JavaScript layer.
 
 For a focused explanation of the route → controller → model → view development
 workflow, read `Project.md`.

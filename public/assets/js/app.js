@@ -51,11 +51,6 @@ if (window.DataTable) {
     });
 }
 
-document.querySelectorAll('.toast-stack .toast').forEach((toast) => {
-    const close = () => {
-        toast.classList.add('toast-hide');
-        window.setTimeout(() => toast.remove(), 220);
-    };
-    toast.querySelector('button')?.addEventListener('click', close);
-    window.setTimeout(close, 4500);
+document.querySelectorAll('.toast-container .toast').forEach((element) => {
+    bootstrap.Toast.getOrCreateInstance(element).show();
 });

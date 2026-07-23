@@ -8,8 +8,9 @@ require BASE_PATH . '/app/Views/partials/admin-header.php';
 $baseUrl = 'admin/roles';
 require BASE_PATH . '/app/Views/partials/table-filters.php';
 ?>
-<div class="table-card table-responsive">
-    <table class="table table-striped table-hover table-bordered align-middle mb-0 data-table">
+<div class="card table-card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0 data-table">
         <thead><tr><th>Role</th><th>Permissions</th><th>Users</th><th class="actions-cell">Actions</th></tr></thead>
         <tbody>
         <?php foreach ($result['items'] as $item): ?>
@@ -29,5 +30,6 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
         <?php endforeach; ?>
         </tbody>
     </table>
+  </div>
 </div>
 <?php require BASE_PATH . '/app/Views/partials/pagination.php'; ?>

@@ -14,25 +14,25 @@
     <link rel="stylesheet" href="<?= htmlspecialchars(url('assets/css/app.css'), ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
-    <?php $hideHeader = ($title ?? null) === 'Login'; ?>
+    <?php $hideHeader = in_array(($title ?? null), ['Login', 'Register'], true); ?>
     <div class="page-loader" role="status" aria-label="Loading page"><div class="spinner-border text-primary" aria-hidden="true"></div><span class="visually-hidden">Loading…</span></div>
     <?php if (!$hideHeader): ?>
     <header class="navbar navbar-expand border-bottom bg-body sticky-top">
-      <div class="container-fluid site-nav">
-          <a class="brand" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">
+      <div class="container py-2">
+          <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold brand" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">
             <?php if (logo_url()): ?>
                 <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
                      alt="<?= htmlspecialchars((string) config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
             <?php endif; ?>
             <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
         </a>
-        <nav class="nav-links">
+        <nav class="d-flex align-items-center gap-2">
             <button class="theme-toggle btn btn-outline-secondary btn-sm d-inline-flex align-items-center" type="button" aria-label="Switch color theme"><?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?></button>
             <?php if (\App\Core\Auth::check()): ?>
-                <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">Dashboard</a>
+                <a class="btn btn-primary btn-sm" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">Dashboard</a>
             <?php else: ?>
-                <a href="<?= htmlspecialchars(url('login'), ENT_QUOTES, 'UTF-8') ?>">Login</a>
-                <a href="<?= htmlspecialchars(url('register'), ENT_QUOTES, 'UTF-8') ?>">Register</a>
+                <a class="btn btn-link btn-sm text-decoration-none" href="<?= htmlspecialchars(url('login'), ENT_QUOTES, 'UTF-8') ?>">Login</a>
+                <a class="btn btn-primary btn-sm" href="<?= htmlspecialchars(url('register'), ENT_QUOTES, 'UTF-8') ?>">Register</a>
             <?php endif; ?>
         </nav>
       </div>
@@ -40,7 +40,7 @@
     <?php else: ?>
         <button class="theme-toggle auth-theme-toggle btn btn-outline-secondary btn-sm d-inline-flex align-items-center" type="button" aria-label="Switch color theme"><?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?></button>
     <?php endif; ?>
-    <main class="container app-content<?= $hideHeader ? ' auth-content' : '' ?>"><?= $content ?></main>
+    <main class="<?= $hideHeader ? 'auth-page container d-flex align-items-center justify-content-center py-5' : 'container py-5' ?>"><?= $content ?></main>
     <?php require __DIR__ . '/../partials/toasts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= htmlspecialchars(url('assets/js/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>

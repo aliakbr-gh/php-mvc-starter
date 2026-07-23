@@ -36,17 +36,19 @@
         <h2 class="offcanvas-title h5" id="dashboardSidebarLabel">Navigation</h2>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body sidebar-content">
-        <a class="brand" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+    <div class="offcanvas-body d-flex flex-column p-3">
+        <a class="d-flex align-items-center gap-2 fw-semibold text-decoration-none text-body brand" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
             <?php if (logo_url()): ?>
                 <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
                      alt="<?= htmlspecialchars((string)config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
             <?php endif; ?>
             <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
         </a>
-        <div class="user-card">
-            <strong><?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
-            <span><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+        <div class="card bg-body-tertiary border-0 my-4">
+            <div class="card-body py-3">
+                <strong class="d-block"><?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
+                <span class="badge text-bg-primary mt-1"><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+            </div>
         </div>
         <nav class="side-nav nav nav-pills flex-column">
             <a class="nav-link" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">Overview</a>
@@ -64,9 +66,9 @@
             <?php endif; ?>
             <a class="nav-link" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">View website</a>
         </nav>
-        <form class="logout" method="post" action="<?= htmlspecialchars(url('logout'), ENT_QUOTES, 'UTF-8') ?>">
+        <form class="mt-auto pt-4" method="post" action="<?= htmlspecialchars(url('logout'), ENT_QUOTES, 'UTF-8') ?>">
             <?= csrf_field() ?>
-            <button type="submit">Log out</button>
+            <button class="btn btn-outline-danger w-100" type="submit">Log out</button>
         </form>
         <button class="theme-toggle btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
                 type="button"
