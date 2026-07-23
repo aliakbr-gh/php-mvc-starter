@@ -2,10 +2,10 @@
 $heading = 'Roles';
 $description = 'Group permissions into reusable access levels.';
 $createPermission = 'roles.create';
-$createUrl = 'admin/roles/create';
+$createUrl = 'roles/create';
 $singular = 'role';
 require BASE_PATH . '/app/Views/partials/admin-header.php';
-$baseUrl = 'admin/roles';
+$baseUrl = 'roles';
 require BASE_PATH . '/app/Views/partials/table-filters.php';
 ?>
 <div class="card table-card">
@@ -36,10 +36,10 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                         </td>
                         <td class="actions-cell">
                             <?php if (\App\Core\Auth::can('roles.update')): ?><a class="btn btn-sm btn-outline-primary"
-                                    href="<?= e(url('admin/roles/' . $item['id'] . '/edit')) ?>">Edit</a><?php endif; ?>
+                                    href="<?= e(url('roles/' . $item['id'] . '/edit')) ?>">Edit</a><?php endif; ?>
                             <?php if (\App\Core\Auth::can('roles.delete')): ?>
                                 <form method="post"
-                                    action="<?= e(url('admin/roles/' . $item['id'] . '/delete')) ?>"
+                                    action="<?= e(url('roles/' . $item['id'] . '/delete')) ?>"
                                     data-confirm="Delete this role?">
                                     <?= csrf_field() ?><button class="btn btn-sm btn-outline-danger"
                                         type="submit">Delete</button>

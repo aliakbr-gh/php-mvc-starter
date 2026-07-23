@@ -32,22 +32,22 @@ final class UserController extends AdminController
         $r = Request::capture();
         $data = $this->validate($r, true);
         if ($data === null)
-            return Response::redirect(url('admin/users/create'));
+            return Response::redirect(url('users/create'));
         try {
             $id = (new User())->createManaged(...$data);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('admin/users/create'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
+            return $this->databaseError($e, url('users/create'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' created user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User created successfully.');
-        return Response::redirect(url('admin/users'));
+        return Response::redirect(url('users'));
     }
 
     public function edit(string $id): Response
     {
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing('User', 'admin/users');
+            return $this->missing('User', 'users');
         return $this->view('admin/users/edit', ['title' => 'Edit user', 'user' => Auth::user(), 'record' => $record, 'roles' => (new Role())->all()]);
     }
 
@@ -56,33 +56,33 @@ final class UserController extends AdminController
         $r = Request::capture();
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing('User', 'admin/users');
+            return $this->missing('User', 'users');
         $data = $this->validate($r, false);
         if ($data === null)
-            return Response::redirect(url('admin/users/' . $id . '/edit'));
+            return Response::redirect(url('users/' . $id . '/edit'));
         try {
             (new User())->update((int) $id, $data[0], $data[1], $data[3], $data[2] ?: null);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('admin/users/' . $id . '/edit'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
+            return $this->databaseError($e, url('users/' . $id . '/edit'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' updated user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User updated successfully.');
-        return Response::redirect(url('admin/users'));
+        return Response::redirect(url('users'));
     }
 
     public function delete(string $id): Response
     {
         if ((int) $id === (int) Auth::user()['id']) {
             flash('error', 'You cannot delete your own account.');
-            return Response::redirect(url('admin/users'));
+            return Response::redirect(url('users'));
         }
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing('User', 'admin/users');
+            return $this->missing('User', 'users');
         (new User())->delete((int) $id);
         ActivityLogger::log(Auth::user()['name'] . ' deleted user ' . $record['email'] . ' from ' . Request::capture()->ip());
         flash('success', 'User deleted.');
-        return Response::redirect(url('admin/users'));
+        return Response::redirect(url('users'));
     }
 
     private function validate(Request $r, bool $passwordRequired): ?array

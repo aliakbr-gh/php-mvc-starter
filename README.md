@@ -197,7 +197,7 @@ coremvc/
 For a request such as:
 
 ```text
-GET /coremvc/admin/users?search=ali&per_page=25&page=2
+GET /coremvc/users?search=ali&per_page=25&page=2
 ```
 
 the application lifecycle is:
@@ -249,9 +249,9 @@ Application routes do not contain `.php`:
 /login
 /register
 /dashboard
-/admin/users
-/admin/roles
-/admin/permissions
+/users
+/roles
+/permissions
 ```
 
 Application source directories are blocked from public HTTP access. The browser
@@ -493,7 +493,7 @@ receives no administration permissions.
 
 ```php
 $router->get(
-    '/admin/reports',
+    '/reports',
     [ReportController::class, 'index'],
     ['auth', 'permission:reports.view']
 );
@@ -503,7 +503,7 @@ $router->get(
 
 ```php
 <?php if (Auth::can('reports.create')): ?>
-    <a href="<?= htmlspecialchars(url('admin/reports/create'), ENT_QUOTES, 'UTF-8') ?>">
+    <a href="<?= htmlspecialchars(url('reports/create'), ENT_QUOTES, 'UTF-8') ?>">
         Add report
     </a>
 <?php endif; ?>
@@ -523,14 +523,14 @@ reports.update
 reports.delete
 ```
 
-Create permissions from `/admin/permissions`, then edit a role at `/admin/roles` and
+Create permissions from `/permissions`, then edit a role at `/roles` and
 select the permissions that role should receive.
 
 ## Administration modules
 
 ### Users
 
-URL: `/admin/users`
+URL: `/users`
 
 The module can:
 
@@ -544,7 +544,7 @@ The module can:
 
 ### Roles
 
-URL: `/admin/roles`
+URL: `/roles`
 
 The module can:
 
@@ -561,7 +561,7 @@ restricting foreign key.
 
 ### Permissions
 
-URL: `/admin/permissions`
+URL: `/permissions`
 
 The module can:
 
@@ -582,7 +582,7 @@ loading the entire table into PHP.
 Example query string:
 
 ```text
-/admin/users?search=ali&per_page=25&page=2
+/users?search=ali&per_page=25&page=2
 ```
 
 Supported page sizes are:

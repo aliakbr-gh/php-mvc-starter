@@ -2,7 +2,7 @@
     <h1 class="h3 mb-1">Create user</h1>
     <p class="text-body-secondary mb-0">Add an account and assign its role.</p>
 </header>
-<form class="card shadow-sm" method="post" action="<?= e(url('admin/users')) ?>">
+<form class="card shadow-sm" method="post" action="<?= e(url('users')) ?>">
     <?= csrf_field() ?>
     <div class="card-body vstack gap-3">
         <div>
@@ -27,7 +27,7 @@
         </div>
         <div class="d-flex gap-2 pt-2">
             <button class="btn btn-primary" type="submit">Create user</button>
-            <a class="btn btn-outline-secondary" href="<?= e(url('admin/users')) ?>">Cancel</a>
+            <a class="btn btn-outline-secondary" href="<?= e(url('users')) ?>">Cancel</a>
         </div>
     </div>
 </form>

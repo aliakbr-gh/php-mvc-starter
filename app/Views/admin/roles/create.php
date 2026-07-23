@@ -2,7 +2,7 @@
     <h1 class="h3 mb-1">Create role</h1>
     <p class="text-body-secondary mb-0">Choose the exact permissions granted to this role.</p>
 </header>
-<form class="card shadow-sm" method="post" action="<?= e(url('admin/roles')) ?>">
+<form class="card shadow-sm" method="post" action="<?= e(url('roles')) ?>">
     <?= csrf_field() ?>
     <div class="card-body vstack gap-4">
         <div class="row g-3">
@@ -33,7 +33,7 @@
         </fieldset>
         <div class="d-flex gap-2">
             <button class="btn btn-primary" type="submit">Create role</button>
-            <a class="btn btn-outline-secondary" href="<?= e(url('admin/roles')) ?>">Cancel</a>
+            <a class="btn btn-outline-secondary" href="<?= e(url('roles')) ?>">Cancel</a>
         </div>
     </div>
 </form>

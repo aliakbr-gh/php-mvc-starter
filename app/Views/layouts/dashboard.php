@@ -91,13 +91,13 @@ $navigationStyle = $authenticated
                         </button>
                         <div class="collapse nav-submenu" id="adminSubmenu">
                             <?php if (\App\Core\Auth::can('users.view')): ?>
-                                <a class="nav-link" href="<?= e(url('admin/users')) ?>">Users</a>
+                                <a class="nav-link" href="<?= e(url('users')) ?>">Users</a>
                             <?php endif; ?>
                             <?php if (\App\Core\Auth::can('roles.view')): ?>
-                                <a class="nav-link" href="<?= e(url('admin/roles')) ?>">Roles</a>
+                                <a class="nav-link" href="<?= e(url('roles')) ?>">Roles</a>
                             <?php endif; ?>
                             <?php if (\App\Core\Auth::can('permissions.view')): ?>
-                                <a class="nav-link" href="<?= e(url('admin/permissions')) ?>">Permissions</a>
+                                <a class="nav-link" href="<?= e(url('permissions')) ?>">Permissions</a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -164,13 +164,13 @@ $navigationStyle = $authenticated
                                     </button>
                                     <ul class="dropdown-menu">
                                         <?php if (\App\Core\Auth::can('users.view')): ?>
-                                            <li><a class="dropdown-item" href="<?= e(url('admin/users')) ?>">Users</a></li>
+                                            <li><a class="dropdown-item" href="<?= e(url('users')) ?>">Users</a></li>
                                         <?php endif; ?>
                                         <?php if (\App\Core\Auth::can('roles.view')): ?>
-                                            <li><a class="dropdown-item" href="<?= e(url('admin/roles')) ?>">Roles</a></li>
+                                            <li><a class="dropdown-item" href="<?= e(url('roles')) ?>">Roles</a></li>
                                         <?php endif; ?>
                                         <?php if (\App\Core\Auth::can('permissions.view')): ?>
-                                            <li><a class="dropdown-item" href="<?= e(url('admin/permissions')) ?>">Permissions</a></li>
+                                            <li><a class="dropdown-item" href="<?= e(url('permissions')) ?>">Permissions</a></li>
                                         <?php endif; ?>
                                     </ul>
                                 </div>

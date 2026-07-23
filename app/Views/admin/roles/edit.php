@@ -2,7 +2,7 @@
     <h1 class="h3 mb-1">Edit role</h1>
     <p class="text-body-secondary mb-0">Update this role and its granted permissions.</p>
 </header>
-<form class="card shadow-sm" method="post" action="<?= e(url('admin/roles/' . $record['id'] . '/update')) ?>">
+<form class="card shadow-sm" method="post" action="<?= e(url('roles/' . $record['id'] . '/update')) ?>">
     <?= csrf_field() ?>
     <div class="card-body vstack gap-4">
         <div class="row g-3">
@@ -33,7 +33,7 @@
         </fieldset>
         <div class="d-flex gap-2">
             <button class="btn btn-primary" type="submit">Update role</button>
-            <a class="btn btn-outline-secondary" href="<?= e(url('admin/roles')) ?>">Cancel</a>
+            <a class="btn btn-outline-secondary" href="<?= e(url('roles')) ?>">Cancel</a>
         </div>
     </div>
 </form>

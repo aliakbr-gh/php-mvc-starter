@@ -2,10 +2,10 @@
 $heading = 'Users';
 $description = 'Manage accounts and assign each user to a role.';
 $createPermission = 'users.create';
-$createUrl = 'admin/users/create';
+$createUrl = 'users/create';
 $singular = 'user';
 require BASE_PATH . '/app/Views/partials/admin-header.php';
-$baseUrl = 'admin/users';
+$baseUrl = 'users';
 require BASE_PATH . '/app/Views/partials/table-filters.php';
 ?>
 <div class="card table-card">
@@ -36,10 +36,10 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                         </td>
                         <td class="actions-cell">
                             <?php if (\App\Core\Auth::can('users.update')): ?><a class="btn btn-sm btn-outline-primary"
-                                    href="<?= e(url('admin/users/' . $item['id'] . '/edit')) ?>">Edit</a><?php endif; ?>
+                                    href="<?= e(url('users/' . $item['id'] . '/edit')) ?>">Edit</a><?php endif; ?>
                             <?php if (\App\Core\Auth::can('users.delete')): ?>
                                 <form method="post"
-                                    action="<?= e(url('admin/users/' . $item['id'] . '/delete')) ?>"
+                                    action="<?= e(url('users/' . $item['id'] . '/delete')) ?>"
                                     data-confirm="Delete this user?">
                                     <?= csrf_field() ?><button class="btn btn-sm btn-outline-danger"
                                         type="submit">Delete</button>
