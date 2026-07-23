@@ -219,6 +219,28 @@ the application lifecycle is:
 11. The controller returns a `Response` containing a rendered view or redirect.
 12. The response sends its HTTP status, headers, and body.
 
+## Health check
+
+`GET /health` returns a public JSON health report for the application and database.
+It responds with HTTP `200` when the database is reachable and HTTP `503` when the
+database check fails. Connection credentials and exception details are never
+included in the response.
+
+```json
+{
+  "status": "healthy",
+  "app": {
+    "status": "up",
+    "name": "Core MVC",
+    "php_version": "8.4.4"
+  },
+  "database": {
+    "status": "up",
+    "response_time_ms": 1.25
+  }
+}
+```
+
 ## Clean URLs
 
 Application routes do not contain `.php`:

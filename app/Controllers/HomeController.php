@@ -14,12 +14,4 @@ final class HomeController extends Controller
     {
         return Response::redirect(url(Auth::check() ? 'dashboard' : 'login'));
     }
-
-    public function hello(string $name): Response
-    {
-        return $this->view('home/hello', [
-            'title' => 'Hello',
-            'name' => $name,
-        ]);
-    }
 }

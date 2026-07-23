@@ -9,11 +9,12 @@ use App\Controllers\UserController;
 use App\Controllers\RoleController;
 use App\Controllers\PermissionController;
 use App\Controllers\SettingsController;
+use App\Controllers\HealthController;
 
 $router = $app->router();
 
 $router->get('/', [HomeController::class, 'index']);
-$router->get('/hello/{name}', [HomeController::class, 'hello']);
+$router->get('/health', [HealthController::class, 'index']);
 $router->get('/login', [AuthController::class, 'loginForm'], ['guest']);
 $router->post('/login', [AuthController::class, 'login'], ['guest']);
 $router->get('/register', [AuthController::class, 'registerForm'], ['guest']);
@@ -22,8 +23,6 @@ $router->post('/logout', [AuthController::class, 'logout'], ['auth']);
 $router->get('/dashboard', [DashboardController::class, 'index'], ['auth']);
 $router->get('/settings', [SettingsController::class, 'index'], ['auth']);
 $router->post('/settings', [SettingsController::class, 'update'], ['auth']);
-$router->get('/admin', [DashboardController::class, 'admin'], ['auth', 'permission:users.view']);
-
 $router->get('/admin/users', [UserController::class, 'index'], ['auth', 'permission:users.view']);
 $router->get('/admin/users/create', [UserController::class, 'create'], ['auth', 'permission:users.create']);
 $router->post('/admin/users', [UserController::class, 'store'], ['auth', 'permission:users.create']);
