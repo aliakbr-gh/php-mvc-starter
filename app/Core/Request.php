@@ -87,6 +87,13 @@ final class Request
         return $this->body;
     }
 
+    public function file(string $key): ?array
+    {
+        $file = $_FILES[$key] ?? null;
+
+        return is_array($file) ? $file : null;
+    }
+
     public function raw(): string
     {
         return $this->rawBody;

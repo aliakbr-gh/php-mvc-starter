@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\Config;
+use App\Core\AppSettings;
 
 if (!function_exists('config')) {
     function config(?string $key = null, mixed $default = null): mixed
@@ -14,7 +15,7 @@ if (!function_exists('config')) {
 if (!function_exists('app_name')) {
     function app_name(): string
     {
-        return (string) config('name', 'Core MVC');
+        return AppSettings::appName();
     }
 }
 
@@ -32,7 +33,16 @@ if (!function_exists('page_title')) {
 if (!function_exists('logo_url')) {
     function logo_url(): ?string
     {
-        $path = config('branding.logo_path');
+        $path = AppSettings::logoPath();
+
+        return is_string($path) && $path !== '' ? url($path) : null;
+    }
+}
+
+if (!function_exists('favicon_url')) {
+    function favicon_url(): ?string
+    {
+        $path = AppSettings::faviconPath();
 
         return is_string($path) && $path !== '' ? url($path) : null;
     }

@@ -123,19 +123,22 @@ APP_DEBUG
 APP_TIMEZONE
 ```
 
-Application name and branding are configured once in `config/config.php`:
+Application name, logo, favicon, and navigation style can be managed from
+`/settings`. Saved branding values are stored in the protected
+`storage/cache/app_settings.json` file. `config/config.php` provides the defaults
+used before settings have been saved:
 
 ```php
 'name' => getenv('APP_NAME') ?: 'Core MVC',
 'branding' => [
     'logo_path' => 'assets/images/logo.svg',
-    'logo_alt' => getenv('APP_NAME') ?: 'Core MVC',
+    'favicon_path' => null,
 ],
 ```
 
-Page titles use `Page - APP_NAME`, for example `Login - Core MVC`. Set
-`branding.logo_path` to a path relative to `public/`, or set it to `null` to hide
-the logo.
+Page titles use `Page - APP_NAME`, for example `Login - Core MVC`. Branding
+uploads are validated by MIME type and size, assigned random filenames, and stored
+under `public/uploads/branding`.
 
 Supported database variables:
 

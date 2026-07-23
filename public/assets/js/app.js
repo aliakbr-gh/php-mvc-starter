@@ -131,3 +131,33 @@ if (window.DataTable) {
 document.querySelectorAll(".toast-container .toast").forEach((element) => {
   bootstrap.Toast.getOrCreateInstance(element).show();
 });
+
+const appNameInput = document.querySelector("#app-name");
+const brandNamePreview = document.querySelector(".settings-brand-preview strong");
+if (appNameInput && brandNamePreview) {
+  appNameInput.addEventListener("input", () => {
+    brandNamePreview.textContent = appNameInput.value.trim() || "Application";
+  });
+}
+
+const bindImagePreview = (inputSelector, previewSelector) => {
+  const input = document.querySelector(inputSelector);
+  const preview = document.querySelector(previewSelector);
+  if (!input || !preview) return;
+
+  input.addEventListener("change", () => {
+    const file = input.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+
+    let image = preview.querySelector("img");
+    if (!image) {
+      image = document.createElement("img");
+      image.alt = "Selected image preview";
+      preview.replaceChildren(image);
+    }
+    image.src = URL.createObjectURL(file);
+  });
+};
+
+bindImagePreview("#logo", ".upload-preview-logo");
+bindImagePreview("#favicon", ".upload-preview-favicon");

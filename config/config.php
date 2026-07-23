@@ -10,7 +10,7 @@ return [
     'branding' => [
         // Path is relative to the public directory. Use null to hide the logo.
         'logo_path' => 'assets/images/logo.svg',
-        'logo_alt' => getenv('APP_NAME') ?: 'Core MVC',
+        'favicon_path' => null,
     ],
 
     'session' => [

@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(page_title($title ?? null)) ?></title>
+    <?php if (favicon_url()): ?>
+        <link rel="icon" href="<?= e(favicon_url()) ?>">
+    <?php endif; ?>
     <script>
         (() => {
             const saved = localStorage.getItem('theme');
@@ -57,7 +60,7 @@ $navigationStyle = $authenticated
                     href="<?= e(url('dashboard')) ?>">
                     <?php if (logo_url()): ?>
                         <img src="<?= e(logo_url()) ?>"
-                            alt="<?= e((string) config('branding.logo_alt', app_name())) ?>">
+                            alt="<?= e(app_name()) ?>">
                     <?php endif; ?>
                     <span id="dashboardSidebarLabel"><?= e(app_name()) ?></span>
                 </a>
@@ -141,7 +144,7 @@ $navigationStyle = $authenticated
                     <a class="navbar-brand brand d-flex align-items-center gap-2" href="<?= e(url('dashboard')) ?>">
                         <?php if (logo_url()): ?>
                             <img src="<?= e(logo_url()) ?>"
-                                alt="<?= e((string) config('branding.logo_alt', app_name())) ?>">
+                                alt="<?= e(app_name()) ?>">
                         <?php endif; ?>
                         <span><?= e(app_name()) ?></span>
                     </a>
