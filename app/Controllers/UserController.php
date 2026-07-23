@@ -6,14 +6,13 @@ namespace App\Controllers;
 
 use App\Core\ActivityLogger;
 use App\Core\Auth;
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Response;
 use App\Models\Role;
 use App\Models\User;
 use PDOException;
 
-final class UserController extends Controller
+final class UserController extends AdminController
 {
     public function index(): Response
     {
@@ -25,7 +24,7 @@ final class UserController extends Controller
 
     public function create(): Response
     {
-        return $this->form(null);
+        return $this->view('admin/users/create', ['title' => 'Create user', 'user' => Auth::user(), 'roles' => (new Role())->all()], 'layouts/dashboard');
     }
 
     public function store(): Response
@@ -37,7 +36,7 @@ final class UserController extends Controller
         try {
             $id = (new User())->createManaged(...$data);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('admin/users/create'));
+            return $this->databaseError($e, url('admin/users/create'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' created user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User created successfully.');
@@ -48,8 +47,8 @@ final class UserController extends Controller
     {
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing();
-        return $this->form($record);
+            return $this->missing('User', 'admin/users');
+        return $this->view('admin/users/edit', ['title' => 'Edit user', 'user' => Auth::user(), 'record' => $record, 'roles' => (new Role())->all()], 'layouts/dashboard');
     }
 
     public function update(string $id): Response
@@ -57,14 +56,14 @@ final class UserController extends Controller
         $r = Request::capture();
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing();
+            return $this->missing('User', 'admin/users');
         $data = $this->validate($r, false);
         if ($data === null)
             return Response::redirect(url('admin/users/' . $id . '/edit'));
         try {
             (new User())->update((int) $id, $data[0], $data[1], $data[3], $data[2] ?: null);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('admin/users/' . $id . '/edit'));
+            return $this->databaseError($e, url('admin/users/' . $id . '/edit'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' updated user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User updated successfully.');
@@ -79,16 +78,11 @@ final class UserController extends Controller
         }
         $record = (new User())->findById((int) $id);
         if (!$record)
-            return $this->missing();
+            return $this->missing('User', 'admin/users');
         (new User())->delete((int) $id);
         ActivityLogger::log(Auth::user()['name'] . ' deleted user ' . $record['email'] . ' from ' . Request::capture()->ip());
         flash('success', 'User deleted.');
         return Response::redirect(url('admin/users'));
-    }
-
-    private function form(?array $record): Response
-    {
-        return $this->view('admin/users/form', ['title' => $record ? 'Edit user' : 'Create user', 'user' => Auth::user(), 'record' => $record, 'roles' => (new Role())->all()], 'layouts/dashboard');
     }
 
     private function validate(Request $r, bool $passwordRequired): ?array
@@ -104,23 +98,4 @@ final class UserController extends Controller
         return [$name, $email, $password, $role];
     }
 
-    private function filters(Request $r): array
-    {
-        $per = (int) $r->query('per_page', 10);
-        if (!in_array($per, [10, 25, 50], true))
-            $per = 10;
-        return [trim((string) $r->query('search', '')), max(1, (int) $r->query('page', 1)), $per];
-    }
-
-    private function databaseError(PDOException $e, string $back): Response
-    {
-        flash('error', (string) $e->getCode() === '23000' ? 'Email already exists or the selected role is invalid.' : 'Could not save the user.');
-        return Response::redirect($back);
-    }
-
-    private function missing(): Response
-    {
-        flash('error', 'User not found.');
-        return Response::redirect(url('admin/users'));
-    }
 }

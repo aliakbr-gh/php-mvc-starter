@@ -21,7 +21,7 @@ final class HomeController extends Controller
     {
         return $this->view('home/hello', [
             'title' => 'Hello',
-            'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
+            'name' => $name,
         ]);
     }
 }

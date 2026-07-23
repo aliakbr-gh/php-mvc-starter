@@ -49,6 +49,13 @@ if (!function_exists('url')) {
     }
 }
 
+if (!function_exists('e')) {
+    function e(mixed $value): string
+    {
+        return htmlspecialchars((string) ($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+}
+
 if (!function_exists('dd')) {
     function dd(mixed ...$values): never
     {
@@ -76,7 +83,7 @@ if (!function_exists('csrf_token')) {
 if (!function_exists('csrf_field')) {
     function csrf_field(): string
     {
-        return '<input type="hidden" name="_token" value="' . htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
+        return '<input type="hidden" name="_token" value="' . e(csrf_token()) . '">';
     }
 }
 

@@ -6,13 +6,12 @@ namespace App\Controllers;
 
 use App\Core\ActivityLogger;
 use App\Core\Auth;
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Response;
 use App\Models\Permission;
 use PDOException;
 
-final class PermissionController extends Controller
+final class PermissionController extends AdminController
 {
     public function index(): Response
     {
@@ -32,7 +31,7 @@ final class PermissionController extends Controller
 
     public function create(): Response
     {
-        return $this->form(null);
+        return $this->view('admin/permissions/create', ['title' => 'Create permission', 'user' => Auth::user()], 'layouts/dashboard');
     }
 
     public function store(): Response
@@ -47,7 +46,7 @@ final class PermissionController extends Controller
         try {
             (new Permission())->create(...$data);
         } catch (PDOException $exception) {
-            return $this->databaseError($exception, url('admin/permissions/create'));
+            return $this->databaseError($exception, url('admin/permissions/create'), 'That permission slug already exists.', 'Could not save the permission.');
         }
 
         ActivityLogger::log(Auth::user()['name'] . ' created permission ' . $data[1] . ' from ' . $request->ip());
@@ -60,7 +59,9 @@ final class PermissionController extends Controller
     {
         $record = (new Permission())->find((int) $id);
 
-        return $record ? $this->form($record) : $this->missing();
+        return $record
+            ? $this->view('admin/permissions/edit', ['title' => 'Edit permission', 'user' => Auth::user(), 'record' => $record], 'layouts/dashboard')
+            : $this->missing('Permission', 'admin/permissions');
     }
 
     public function update(string $id): Response
@@ -68,7 +69,7 @@ final class PermissionController extends Controller
         $request = Request::capture();
 
         if ((new Permission())->find((int) $id) === null) {
-            return $this->missing();
+            return $this->missing('Permission', 'admin/permissions');
         }
 
         $data = $this->data($request);
@@ -80,7 +81,7 @@ final class PermissionController extends Controller
         try {
             (new Permission())->update((int) $id, ...$data);
         } catch (PDOException $exception) {
-            return $this->databaseError($exception, url('admin/permissions/' . $id . '/edit'));
+            return $this->databaseError($exception, url('admin/permissions/' . $id . '/edit'), 'That permission slug already exists.', 'Could not save the permission.');
         }
 
         ActivityLogger::log(Auth::user()['name'] . ' updated permission ' . $data[1] . ' from ' . $request->ip());
@@ -94,7 +95,7 @@ final class PermissionController extends Controller
         $record = (new Permission())->find((int) $id);
 
         if ($record === null) {
-            return $this->missing();
+            return $this->missing('Permission', 'admin/permissions');
         }
 
         (new Permission())->delete((int) $id);
@@ -102,15 +103,6 @@ final class PermissionController extends Controller
         flash('success', 'Permission deleted.');
 
         return Response::redirect(url('admin/permissions'));
-    }
-
-    private function form(?array $record): Response
-    {
-        return $this->view('admin/permissions/form', [
-            'title' => $record ? 'Edit permission' : 'Create permission',
-            'user' => Auth::user(),
-            'record' => $record,
-        ], 'layouts/dashboard');
     }
 
     private function data(Request $request): ?array
@@ -126,34 +118,4 @@ final class PermissionController extends Controller
         return [$name, $slug];
     }
 
-    private function filters(Request $request): array
-    {
-        $perPage = (int) $request->query('per_page', 10);
-
-        if (!in_array($perPage, [10, 25, 50], true)) {
-            $perPage = 10;
-        }
-
-        return [
-            trim((string) $request->query('search', '')),
-            max(1, (int) $request->query('page', 1)),
-            $perPage,
-        ];
-    }
-
-    private function databaseError(PDOException $exception, string $back): Response
-    {
-        $message = (string) $exception->getCode() === '23000'
-            ? 'That permission slug already exists.'
-            : 'Could not save the permission.';
-
-        flash('error', $message);
-        return Response::redirect($back);
-    }
-
-    private function missing(): Response
-    {
-        flash('error', 'Permission not found.');
-        return Response::redirect(url('admin/permissions'));
-    }
 }

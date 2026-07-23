@@ -7,11 +7,11 @@
         <?php foreach ($features as $feature): ?>
             <div class="col-12 col-md-6 col-lg-4">
                 <article class="card h-100">
-                    <div class="card-body"><?= htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="card-body"><?= e($feature) ?></div>
                 </article>
             </div>
         <?php endforeach; ?>
     </div>
-    <a class="btn btn-primary" href="<?= htmlspecialchars(url('hello/developer'), ENT_QUOTES, 'UTF-8') ?>">Try a dynamic
+    <a class="btn btn-primary" href="<?= e(url('hello/developer')) ?>">Try a dynamic
         route</a>
 </section>

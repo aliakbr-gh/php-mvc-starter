@@ -3,7 +3,7 @@
         <h1 class="h3 mb-1">Dashboard</h1>
         <p class="text-body-secondary mb-0">A quick overview of your account.</p>
     </div>
-    <span class="badge text-bg-primary"><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+    <span class="badge text-bg-primary"><?= e($user['role_name']) ?></span>
 </header>
 
 <div class="row g-3 mb-4">
@@ -19,8 +19,8 @@
             <article class="card h-100 shadow-sm">
                 <div class="card-body">
                     <span
-                        class="small text-uppercase text-body-secondary"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span>
-                    <strong class="d-block mt-2 text-break"><?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?></strong>
+                        class="small text-uppercase text-body-secondary"><?= e($label) ?></span>
+                    <strong class="d-block mt-2 text-break"><?= e($value) ?></strong>
                 </div>
             </article>
         </div>
@@ -51,10 +51,10 @@
                 <article class="list-group-item d-flex gap-3 py-3">
                     <span class="activity-dot flex-shrink-0"></span>
                     <div>
-                        <strong class="d-block"><?= htmlspecialchars($activity['activity'], ENT_QUOTES, 'UTF-8') ?></strong>
+                        <strong class="d-block"><?= e($activity['activity']) ?></strong>
                         <time class="small text-body-secondary"
-                            datetime="<?= htmlspecialchars($activity['created_at'], ENT_QUOTES, 'UTF-8') ?>">
-                            <?= htmlspecialchars(date('M j, Y · g:i A', strtotime($activity['created_at'])), ENT_QUOTES, 'UTF-8') ?>
+                            datetime="<?= e($activity['created_at']) ?>">
+                            <?= e(date('M j, Y · g:i A', strtotime($activity['created_at']))) ?>
                         </time>
                     </div>
                 </article>

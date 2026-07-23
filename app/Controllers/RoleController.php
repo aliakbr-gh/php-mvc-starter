@@ -6,14 +6,13 @@ namespace App\Controllers;
 
 use App\Core\ActivityLogger;
 use App\Core\Auth;
-use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Response;
 use App\Models\Permission;
 use App\Models\Role;
 use PDOException;
 
-final class RoleController extends Controller
+final class RoleController extends AdminController
 {
     public function index(): Response
     {
@@ -33,7 +32,7 @@ final class RoleController extends Controller
 
     public function create(): Response
     {
-        return $this->form(null);
+        return $this->view('admin/roles/create', $this->formData('Create role'), 'layouts/dashboard');
     }
 
     public function store(): Response
@@ -45,7 +44,7 @@ final class RoleController extends Controller
         try {
             (new Role())->create(...$d);
         } catch (PDOException $e) {
-            return $this->error($e, url('admin/roles/create'));
+            return $this->databaseError($e, url('admin/roles/create'), 'That role slug already exists.', 'Could not save the role.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' created role ' . $d[0] . ' from ' . $r->ip());
         flash('success', 'Role created.');
@@ -55,7 +54,9 @@ final class RoleController extends Controller
     public function edit(string $id): Response
     {
         $role = (new Role())->find((int) $id);
-        return $role ? $this->form($role) : $this->missing();
+        return $role
+            ? $this->view('admin/roles/edit', $this->formData('Edit role', $role), 'layouts/dashboard')
+            : $this->missing('Role', 'admin/roles');
     }
 
     public function update(string $id): Response
@@ -63,14 +64,14 @@ final class RoleController extends Controller
         $r = Request::capture();
         $role = (new Role())->find((int) $id);
         if (!$role)
-            return $this->missing();
+            return $this->missing('Role', 'admin/roles');
         $d = $this->data($r);
         if (!$d)
             return Response::redirect(url('admin/roles/' . $id . '/edit'));
         try {
             (new Role())->update((int) $id, ...$d);
         } catch (PDOException $e) {
-            return $this->error($e, url('admin/roles/' . $id . '/edit'));
+            return $this->databaseError($e, url('admin/roles/' . $id . '/edit'), 'That role slug already exists.', 'Could not save the role.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' updated role ' . $d[0] . ' from ' . $r->ip());
         flash('success', 'Role updated.');
@@ -81,7 +82,7 @@ final class RoleController extends Controller
     {
         $role = (new Role())->find((int) $id);
         if (!$role)
-            return $this->missing();
+            return $this->missing('Role', 'admin/roles');
         if (in_array($role['slug'], ['admin', 'user'], true)) {
             flash('error', 'System roles cannot be deleted.');
             return Response::redirect(url('admin/roles'));
@@ -97,15 +98,15 @@ final class RoleController extends Controller
         return Response::redirect(url('admin/roles'));
     }
 
-    private function form(?array $role): Response
+    private function formData(string $title, ?array $role = null): array
     {
-        return $this->view('admin/roles/form', [
-            'title' => $role ? 'Edit role' : 'Create role',
+        return [
+            'title' => $title,
             'user' => Auth::user(),
             'record' => $role,
             'permissions' => (new Permission())->all(),
             'selected' => $role ? (new Role())->permissionIds((int) $role['id']) : [],
-        ], 'layouts/dashboard');
+        ];
     }
 
     private function data(Request $request): ?array
@@ -122,25 +123,4 @@ final class RoleController extends Controller
         return [$name, $slug, $permissions];
     }
 
-    private function filters(Request $request): array
-    {
-        $perPage = (int) $request->query('per_page', 10);
-        if (!in_array($perPage, [10, 25, 50], true)) {
-            $perPage = 10;
-        }
-
-        return [trim((string) $request->query('search', '')), max(1, (int) $request->query('page', 1)), $perPage];
-    }
-
-    private function error(PDOException $exception, string $back): Response
-    {
-        flash('error', (string) $exception->getCode() === '23000' ? 'That role slug already exists.' : 'Could not save the role.');
-        return Response::redirect($back);
-    }
-
-    private function missing(): Response
-    {
-        flash('error', 'Role not found.');
-        return Response::redirect(url('admin/roles'));
-    }
 }

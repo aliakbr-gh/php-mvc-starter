@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= htmlspecialchars(page_title($title ?? null), ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= e(page_title($title ?? null)) ?></title>
     <script>
         (() => {
             const saved = localStorage.getItem('theme');
@@ -12,7 +12,7 @@
         })();
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= htmlspecialchars(url('assets/css/app.css') . '?v=' . filemtime(BASE_PATH . '/public/assets/css/app.css'), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= e(url('assets/css/app.css') . '?v=' . filemtime(BASE_PATH . '/public/assets/css/app.css')) ?>">
 </head>
 
 <body>
@@ -24,12 +24,12 @@
         <header class="navbar navbar-expand border-bottom bg-body sticky-top">
             <div class="container-fluid app-shell py-2">
                 <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold brand"
-                    href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">
+                    href="<?= e(url()) ?>">
                     <?php if (logo_url()): ?>
-                        <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
-                            alt="<?= htmlspecialchars((string) config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
+                        <img src="<?= e(logo_url()) ?>"
+                            alt="<?= e((string) config('branding.logo_alt', app_name())) ?>">
                     <?php endif; ?>
-                    <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
+                    <span><?= e(app_name()) ?></span>
                 </a>
                 <nav class="d-flex align-items-center gap-2">
                     <button class="theme-toggle btn btn-outline-secondary btn-sm d-inline-flex align-items-center"
@@ -37,12 +37,12 @@
                         aria-label="Switch color theme"><?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?></button>
                     <?php if (\App\Core\Auth::check()): ?>
                         <a class="btn btn-primary btn-sm"
-                            href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">Dashboard</a>
+                            href="<?= e(url('dashboard')) ?>">Dashboard</a>
                     <?php else: ?>
                         <a class="btn btn-link btn-sm text-decoration-none"
-                            href="<?= htmlspecialchars(url('login'), ENT_QUOTES, 'UTF-8') ?>">Login</a>
+                            href="<?= e(url('login')) ?>">Login</a>
                         <a class="btn btn-primary btn-sm"
-                            href="<?= htmlspecialchars(url('register'), ENT_QUOTES, 'UTF-8') ?>">Register</a>
+                            href="<?= e(url('register')) ?>">Register</a>
                     <?php endif; ?>
                 </nav>
             </div>
@@ -57,7 +57,7 @@
         <?= $content ?></main>
     <?php require __DIR__ . '/../partials/toasts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= htmlspecialchars(url('assets/js/app.js') . '?v=' . filemtime(BASE_PATH . '/public/assets/js/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+    <script src="<?= e(url('assets/js/app.js') . '?v=' . filemtime(BASE_PATH . '/public/assets/js/app.js')) ?>"></script>
 </body>
 
 </html>

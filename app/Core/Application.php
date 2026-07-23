@@ -46,7 +46,7 @@ final class Application
             Logger::error('Unhandled exception', ['exception' => (string) $exception]);
             if ($this->config('debug', false)) {
                 $response = Response::html(
-                    '<h1>Application error</h1><pre>' . htmlspecialchars((string) $exception) . '</pre>',
+                    '<h1>Application error</h1><pre>' . e($exception) . '</pre>',
                     500
                 );
             } else {

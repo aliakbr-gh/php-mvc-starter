@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= htmlspecialchars(page_title($title ?? 'Dashboard'), ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= e(page_title($title ?? 'Dashboard')) ?></title>
     <script>
         (() => {
             const saved = localStorage.getItem('theme');
@@ -13,7 +13,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= htmlspecialchars(url('assets/css/app.css') . '?v=' . filemtime(BASE_PATH . '/public/assets/css/app.css'), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= e(url('assets/css/app.css') . '?v=' . filemtime(BASE_PATH . '/public/assets/css/app.css')) ?>">
 </head>
 
 <body class="dashboard-body">
@@ -31,11 +31,11 @@
                 </svg>
             </button>
             <a class="navbar-brand brand d-flex align-items-center gap-2 ms-2 me-auto"
-                href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                href="<?= e(url('dashboard')) ?>">
                 <?php if (logo_url()): ?>
-                    <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>" alt="">
+                    <img src="<?= e(logo_url()) ?>" alt="">
                 <?php endif; ?>
-                <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
+                <span><?= e(app_name()) ?></span>
             </a>
         </div>
     </header>
@@ -43,19 +43,19 @@
         aria-labelledby="dashboardSidebarLabel">
         <div class="offcanvas-header sidebar-header">
             <a class="d-flex align-items-center gap-2 fw-semibold text-decoration-none text-body brand"
-                href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                href="<?= e(url('dashboard')) ?>">
                 <?php if (logo_url()): ?>
-                    <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
-                        alt="<?= htmlspecialchars((string) config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
+                    <img src="<?= e(logo_url()) ?>"
+                        alt="<?= e((string) config('branding.logo_alt', app_name())) ?>">
                 <?php endif; ?>
-            <span id="dashboardSidebarLabel"><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
+            <span id="dashboardSidebarLabel"><?= e(app_name()) ?></span>
             </a>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close navigation"></button>
         </div>
         <div class="offcanvas-body d-flex flex-column">
             <p class="nav-section-label">Main menu</p>
         <nav class="side-nav nav flex-column">
-                <a class="nav-link" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                <a class="nav-link" href="<?= e(url('dashboard')) ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" />
                     </svg>
@@ -74,22 +74,22 @@
                     </button>
                     <div class="collapse nav-submenu" id="adminSubmenu">
                         <?php if (\App\Core\Auth::can('users.view')): ?>
-                            <a class="nav-link" href="<?= htmlspecialchars(url('admin'), ENT_QUOTES, 'UTF-8') ?>">Admin
+                            <a class="nav-link" href="<?= e(url('admin')) ?>">Admin
                                 overview</a>
                             <a class="nav-link"
-                                href="<?= htmlspecialchars(url('admin/users'), ENT_QUOTES, 'UTF-8') ?>">Users</a>
+                                href="<?= e(url('admin/users')) ?>">Users</a>
                         <?php endif; ?>
                         <?php if (\App\Core\Auth::can('roles.view')): ?>
                             <a class="nav-link"
-                                href="<?= htmlspecialchars(url('admin/roles'), ENT_QUOTES, 'UTF-8') ?>">Roles</a>
+                                href="<?= e(url('admin/roles')) ?>">Roles</a>
                         <?php endif; ?>
                         <?php if (\App\Core\Auth::can('permissions.view')): ?>
                             <a class="nav-link"
-                                href="<?= htmlspecialchars(url('admin/permissions'), ENT_QUOTES, 'UTF-8') ?>">Permissions</a>
+                                href="<?= e(url('admin/permissions')) ?>">Permissions</a>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-                <a class="nav-link" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">
+                <a class="nav-link" href="<?= e(url()) ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14 5h5v5M13 11l6-6M19 13v6H5V5h6" />
                     </svg>
@@ -99,11 +99,11 @@
             <div class="sidebar-footer mt-auto">
                 <div class="sidebar-user">
                     <div class="user-avatar" aria-hidden="true">
-                        <?= htmlspecialchars(strtoupper(substr($user['name'], 0, 1)), ENT_QUOTES, 'UTF-8') ?></div>
+                        <?= e(strtoupper(substr($user['name'], 0, 1))) ?></div>
                     <div class="min-w-0">
                         <strong
-                            class="d-block text-truncate"><?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
-                        <span class="small"><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                            class="d-block text-truncate"><?= e($user['name']) ?></strong>
+                        <span class="small"><?= e($user['role_name']) ?></span>
                     </div>
                 </div>
                 <div class="sidebar-actions">
@@ -111,7 +111,7 @@
                         <?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?>
                         <span class="theme-label">Dark mode</span>
                     </button>
-                    <form method="post" action="<?= htmlspecialchars(url('logout'), ENT_QUOTES, 'UTF-8') ?>">
+                    <form method="post" action="<?= e(url('logout')) ?>">
                         <?= csrf_field() ?>
                         <button class="sidebar-action sidebar-action-danger" type="submit">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -131,7 +131,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="<?= htmlspecialchars(url('assets/js/app.js') . '?v=' . filemtime(BASE_PATH . '/public/assets/js/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= e(url('assets/js/app.js') . '?v=' . filemtime(BASE_PATH . '/public/assets/js/app.js')) ?>"></script>
 </body>
 
 </html>

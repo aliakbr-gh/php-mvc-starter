@@ -9,12 +9,12 @@ $query = ['search' => $search, 'per_page' => $perPage]; ?>
         <ul class="pagination pagination-sm mb-0">
             <li class="page-item <?= $current <= 1 ? 'disabled' : '' ?>">
                 <a class="page-link"
-                    href="<?= $current > 1 ? htmlspecialchars(url($baseUrl) . '?' . http_build_query($query + ['page' => $current - 1]), ENT_QUOTES, 'UTF-8') : '#' ?>">Previous</a>
+                    href="<?= $current > 1 ? e(url($baseUrl) . '?' . http_build_query($query + ['page' => $current - 1])) : '#' ?>">Previous</a>
             </li>
             <li class="page-item disabled"><span class="page-link">Page <?= $current ?> of <?= $pages ?></span></li>
             <li class="page-item <?= $current >= $pages ? 'disabled' : '' ?>">
                 <a class="page-link"
-                    href="<?= $current < $pages ? htmlspecialchars(url($baseUrl) . '?' . http_build_query($query + ['page' => $current + 1]), ENT_QUOTES, 'UTF-8') : '#' ?>">Next</a>
+                    href="<?= $current < $pages ? e(url($baseUrl) . '?' . http_build_query($query + ['page' => $current + 1])) : '#' ?>">Next</a>
             </li>
         </ul>
     </nav>
