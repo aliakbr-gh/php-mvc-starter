@@ -44,6 +44,15 @@ Use route middleware to protect a route:
 ['guest']
 ['role:admin']
 ['permission:products.view']
+['permission:products.view,products.update']
+```
+
+Comma-separated roles or permissions use OR logic, so access is allowed when the
+user has any listed value. To require every permission, add separate middleware
+rules:
+
+```php
+['auth', 'permission:products.view', 'permission:products.update']
 ```
 
 ## 2. Controller

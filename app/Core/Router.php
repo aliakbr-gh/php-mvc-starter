@@ -91,7 +91,20 @@ final class Router
             if (str_starts_with($rule, 'permission:')) {
                 if (!Auth::check())
                     return Response::redirect(url('login'));
-                if (!Auth::can(substr($rule, 11)))
+
+                $permissions = array_values(array_filter(
+                    array_map('trim', explode(',', substr($rule, 11)))
+                ));
+                $allowed = false;
+
+                foreach ($permissions as $permission) {
+                    if (Auth::can($permission)) {
+                        $allowed = true;
+                        break;
+                    }
+                }
+
+                if (!$allowed)
                     return Response::html(View::render('errors/403'), 403);
             }
         }
