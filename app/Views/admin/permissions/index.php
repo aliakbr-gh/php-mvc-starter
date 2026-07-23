@@ -14,8 +14,9 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
             <thead>
                 <tr>
                     <th>Permission</th>
-                    <th>Assigned roles</th>
-                    <th>Created</th>
+                    <th class="text-end">Assigned roles</th>
+                    <th>Created at</th>
+                    <th>Updated at</th>
                     <th class="actions-cell">Actions</th>
                 </tr>
             </thead>
@@ -25,9 +26,12 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                         <td>
                             <strong><?= e($item['name']) ?></strong><small><?= e($item['slug']) ?></small>
                         </td>
-                        <td><?= (int) $item['role_count'] ?></td>
+                        <td class="text-end"><?= (int) $item['role_count'] ?></td>
                         <td data-order="<?= (int) strtotime($item['created_at']) ?>">
-                            <?= e(date('M j, Y', strtotime($item['created_at']))) ?>
+                            <?= e(format_timestamp($item['created_at'])) ?>
+                        </td>
+                        <td data-order="<?= (int) strtotime($item['updated_at']) ?>">
+                            <?= e(format_timestamp($item['updated_at'])) ?>
                         </td>
                         <td class="actions-cell">
                             <?php if (\App\Core\Auth::can('permissions.update')): ?><a

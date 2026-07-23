@@ -37,7 +37,7 @@ final class Permission extends Model
         $count->execute();
 
         $query = $this->db()->prepare(
-            'SELECT p.id, p.name, p.slug, p.created_at, COUNT(rp.role_id) AS role_count
+            'SELECT p.id, p.name, p.slug, p.created_at, p.updated_at, COUNT(rp.role_id) AS role_count
              FROM permissions p
              LEFT JOIN role_permissions rp ON rp.permission_id = p.id' . $where . '
              GROUP BY p.id

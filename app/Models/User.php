@@ -10,14 +10,14 @@ final class User extends Model
 {
     public function findById(int $id): ?array
     {
-        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = :id LIMIT 1');
+        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = :id LIMIT 1');
         $statement->execute(['id' => $id]);
         return $statement->fetch() ?: null;
     }
 
     public function findByEmail(string $email): ?array
     {
-        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.email = :email LIMIT 1');
+        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.email = :email LIMIT 1');
         $statement->execute(['email' => strtolower(trim($email))]);
         return $statement->fetch() ?: null;
     }
@@ -64,7 +64,7 @@ final class User extends Model
         $count->execute();
         $total = (int) $count->fetchColumn();
         $offset = ($page - 1) * $perPage;
-        $query = $this->db()->prepare('SELECT u.id, u.name, u.email, u.role_id, u.created_at, r.name AS role_name FROM users u JOIN roles r ON r.id = u.role_id' . $where . ' ORDER BY u.id DESC LIMIT :limit OFFSET :offset');
+        $query = $this->db()->prepare('SELECT u.id, u.name, u.email, u.role_id, u.created_at, u.updated_at, r.name AS role_name FROM users u JOIN roles r ON r.id = u.role_id' . $where . ' ORDER BY u.id DESC LIMIT :limit OFFSET :offset');
         if ($search !== '')
             foreach ([':search_name', ':search_email', ':search_role'] as $key)
                 $query->bindValue($key, '%' . $search . '%');

@@ -45,7 +45,7 @@ final class Role extends Model
         $count->execute();
 
         $query = $this->db()->prepare(
-            'SELECT r.id, r.name, r.slug,
+            'SELECT r.id, r.name, r.slug, r.created_at, r.updated_at,
                     COUNT(DISTINCT rp.permission_id) AS permission_count,
                     COUNT(DISTINCT u.id) AS user_count
              FROM roles r

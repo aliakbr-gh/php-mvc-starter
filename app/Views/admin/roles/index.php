@@ -14,8 +14,10 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
             <thead>
                 <tr>
                     <th>Role</th>
-                    <th>Permissions</th>
-                    <th>Users</th>
+                    <th class="text-end">Permissions</th>
+                    <th class="text-end">Users</th>
+                    <th>Created at</th>
+                    <th>Updated at</th>
                     <th class="actions-cell">Actions</th>
                 </tr>
             </thead>
@@ -24,8 +26,14 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                     <tr>
                         <td><strong><?= e($item['name']) ?></strong><small><?= e($item['slug']) ?></small>
                         </td>
-                        <td><?= (int) $item['permission_count'] ?></td>
-                        <td><?= (int) $item['user_count'] ?></td>
+                        <td class="text-end"><?= (int) $item['permission_count'] ?></td>
+                        <td class="text-end"><?= (int) $item['user_count'] ?></td>
+                        <td data-order="<?= (int) strtotime($item['created_at']) ?>">
+                            <?= e(format_timestamp($item['created_at'])) ?>
+                        </td>
+                        <td data-order="<?= (int) strtotime($item['updated_at']) ?>">
+                            <?= e(format_timestamp($item['updated_at'])) ?>
+                        </td>
                         <td class="actions-cell">
                             <?php if (\App\Core\Auth::can('roles.update')): ?><a class="btn btn-sm btn-outline-primary"
                                     href="<?= e(url('admin/roles/' . $item['id'] . '/edit')) ?>">Edit</a><?php endif; ?>

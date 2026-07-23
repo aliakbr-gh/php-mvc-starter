@@ -322,7 +322,7 @@ body {
 }
 
 .actions-cell {
-    text-align: right;
+    text-align: right !important;
     white-space: nowrap;
 }
 

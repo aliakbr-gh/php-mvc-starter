@@ -54,7 +54,7 @@
                         <strong class="d-block"><?= e($activity['activity']) ?></strong>
                         <time class="small text-body-secondary"
                             datetime="<?= e($activity['created_at']) ?>">
-                            <?= e(date('M j, Y · g:i A', strtotime($activity['created_at']))) ?>
+                            <?= e(format_timestamp($activity['created_at'])) ?>
                         </time>
                     </div>
                 </article>

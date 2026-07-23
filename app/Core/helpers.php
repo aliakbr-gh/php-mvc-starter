@@ -56,6 +56,13 @@ if (!function_exists('e')) {
     }
 }
 
+if (!function_exists('format_timestamp')) {
+    function format_timestamp(string $value): string
+    {
+        return date('M j, Y · g:i:s A', strtotime($value));
+    }
+}
+
 if (!function_exists('dd')) {
     function dd(mixed ...$values): never
     {
