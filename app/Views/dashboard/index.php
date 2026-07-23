@@ -27,14 +27,6 @@
     <?php endforeach; ?>
 </div>
 
-<section class="card shadow-sm mb-4">
-    <div class="card-body">
-        <h2 class="h5">Role-based access is active</h2>
-        <p class="text-body-secondary mb-0">Your sidebar is generated from your role. Administrators see the protected
-            admin area; standard users do not.</p>
-    </div>
-</section>
-
 <section class="card shadow-sm">
     <div class="card-header bg-body d-flex justify-content-between align-items-start gap-3 py-3">
         <div>

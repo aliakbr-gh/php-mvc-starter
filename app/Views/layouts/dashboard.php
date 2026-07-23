@@ -67,7 +67,7 @@ $user = $user ?? \App\Core\Auth::user();
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" />
                         </svg>
-                        <span>Overview</span>
+                        <span>Dashboard</span>
                     </a>
 
                     <?php if (\App\Core\Auth::can('users.view') || \App\Core\Auth::can('roles.view') || \App\Core\Auth::can('permissions.view')): ?>
@@ -77,14 +77,13 @@ $user = $user ?? \App\Core\Auth::user();
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M4 20h16M5 20V9l7-5 7 5v11M9 20v-6h6v6" />
                             </svg>
-                            <span>Administration</span>
+                            <span>Access Control</span>
                             <svg class="dropdown-chevron ms-auto" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="m8 10 4 4 4-4" />
                             </svg>
                         </button>
                         <div class="collapse nav-submenu" id="adminSubmenu">
                             <?php if (\App\Core\Auth::can('users.view')): ?>
-                                <a class="nav-link" href="<?= e(url('admin')) ?>">Admin overview</a>
                                 <a class="nav-link" href="<?= e(url('admin/users')) ?>">Users</a>
                             <?php endif; ?>
                             <?php if (\App\Core\Auth::can('roles.view')): ?>
