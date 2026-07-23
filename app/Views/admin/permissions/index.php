@@ -37,7 +37,7 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                             <?php if (\App\Core\Auth::can('permissions.delete')): ?>
                                 <form method="post"
                                     action="<?= htmlspecialchars(url('admin/permissions/' . $item['id'] . '/delete'), ENT_QUOTES, 'UTF-8') ?>"
-                                    onsubmit="return confirm('Delete this permission?')">
+                                    data-confirm="Delete this permission?">
                                     <?= csrf_field() ?>
                                     <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
                                 </form>

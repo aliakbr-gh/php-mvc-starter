@@ -32,7 +32,7 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
                             <?php if (\App\Core\Auth::can('roles.delete')): ?>
                                 <form method="post"
                                     action="<?= htmlspecialchars(url('admin/roles/' . $item['id'] . '/delete'), ENT_QUOTES, 'UTF-8') ?>"
-                                    onsubmit="return confirm('Delete this role?')">
+                                    data-confirm="Delete this role?">
                                     <?= csrf_field() ?><button class="btn btn-sm btn-outline-danger"
                                         type="submit">Delete</button>
                                 </form>

@@ -40,6 +40,46 @@ document.querySelectorAll(".theme-toggle").forEach((button) => {
 });
 updateThemeControls();
 
+const confirmModalElement = document.querySelector("#confirmActionModal");
+if (confirmModalElement && window.bootstrap) {
+  const confirmModal = bootstrap.Modal.getOrCreateInstance(confirmModalElement);
+  const confirmMessage = confirmModalElement.querySelector(
+    ".confirm-action-message"
+  );
+  const confirmSubmit = confirmModalElement.querySelector(
+    ".confirm-action-submit"
+  );
+  let pendingForm = null;
+
+  document.querySelectorAll("form[data-confirm]").forEach((form) => {
+    form.addEventListener("submit", (event) => {
+      if (form.dataset.confirmed === "true") {
+        delete form.dataset.confirmed;
+        return;
+      }
+
+      event.preventDefault();
+      pendingForm = form;
+      confirmMessage.textContent =
+        form.dataset.confirm || "Are you sure you want to continue?";
+      confirmModal.show();
+    });
+  });
+
+  confirmSubmit.addEventListener("click", () => {
+    if (!pendingForm) return;
+    const form = pendingForm;
+    pendingForm = null;
+    form.dataset.confirmed = "true";
+    confirmModal.hide();
+    form.requestSubmit();
+  });
+
+  confirmModalElement.addEventListener("hidden.bs.modal", () => {
+    pendingForm = null;
+  });
+}
+
 const normalizePath = (path) => path.replace(/\/+$/, "") || "/";
 const currentPath = normalizePath(window.location.pathname);
 const navLinks = [...document.querySelectorAll(".side-nav a[href]")];
