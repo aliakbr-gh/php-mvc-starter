@@ -30,10 +30,12 @@ final class Logger
 
     private static function write(string $level, string $message, array $context): void
     {
-        if (!(self::$config['enabled'] ?? false)) return;
+        if (!(self::$config['enabled'] ?? false))
+            return;
 
         $path = self::$config['path'];
-        if (!is_dir($path)) mkdir($path, 0775, true);
+        if (!is_dir($path))
+            mkdir($path, 0775, true);
         $date = date(self::$config['date_format'] ?? 'Y-m-d');
         $file = $path . '/' . str_replace('{date}', $date, self::$config['filename'] ?? 'app-{date}.log');
         $context = $context === [] ? '' : ' ' . json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

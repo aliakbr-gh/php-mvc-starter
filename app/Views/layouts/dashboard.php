@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,76 +13,124 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= htmlspecialchars(url('assets/css/app.css'), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= htmlspecialchars(url('assets/css/app.css') . '?v=' . filemtime(BASE_PATH . '/public/assets/css/app.css'), ENT_QUOTES, 'UTF-8') ?>">
 </head>
+
 <body class="dashboard-body">
-<div class="page-loader" role="status" aria-label="Loading page">
-    <div class="spinner-border text-primary" aria-hidden="true"></div>
-    <span class="visually-hidden">Loading…</span></div>
-<header class="dashboard-topbar navbar border-bottom bg-body sticky-top">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#dashboardSidebar"
+    <div class="page-loader" role="status" aria-label="Loading page">
+        <div class="spinner-border text-primary" aria-hidden="true"></div>
+        <span class="visually-hidden">Loading…</span>
+    </div>
+    <header class="dashboard-topbar navbar bg-body sticky-top">
+        <div class="container-fluid px-3 px-lg-4">
+            <button class="sidebar-trigger btn btn-light d-inline-flex align-items-center justify-content-center"
+                type="button" data-bs-toggle="offcanvas" data-bs-target="#dashboardSidebar"
                 aria-controls="dashboardSidebar" aria-label="Open navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand brand ms-2 me-auto"
-           href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></a>
-        <button class="theme-toggle btn btn-outline-secondary d-inline-flex align-items-center" type="button"
-                aria-label="Switch color theme"><?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?></button>
-    </div>
-</header>
-<aside class="sidebar offcanvas offcanvas-start" tabindex="-1" id="dashboardSidebar"
-       aria-labelledby="dashboardSidebarLabel">
-    <div class="offcanvas-header border-bottom">
-        <h2 class="offcanvas-title h5" id="dashboardSidebarLabel">Navigation</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column p-3">
-        <a class="d-flex align-items-center gap-2 fw-semibold text-decoration-none text-body brand" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
-            <?php if (logo_url()): ?>
-                <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
-                     alt="<?= htmlspecialchars((string)config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
-            <?php endif; ?>
-            <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
-        </a>
-        <div class="card bg-body-tertiary border-0 my-4">
-            <div class="card-body py-3">
-                <strong class="d-block"><?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
-                <span class="badge text-bg-primary mt-1"><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+            </button>
+            <a class="navbar-brand brand d-flex align-items-center gap-2 ms-2 me-auto"
+                href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                <?php if (logo_url()): ?>
+                    <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>" alt="">
+                <?php endif; ?>
+                <span><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
+            </a>
+        </div>
+    </header>
+    <aside class="sidebar offcanvas offcanvas-start" tabindex="-1" id="dashboardSidebar"
+        aria-labelledby="dashboardSidebarLabel">
+        <div class="offcanvas-header sidebar-header">
+            <a class="d-flex align-items-center gap-2 fw-semibold text-decoration-none text-body brand"
+                href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                <?php if (logo_url()): ?>
+                    <img src="<?= htmlspecialchars(logo_url(), ENT_QUOTES, 'UTF-8') ?>"
+                        alt="<?= htmlspecialchars((string) config('branding.logo_alt', app_name()), ENT_QUOTES, 'UTF-8') ?>">
+                <?php endif; ?>
+            <span id="dashboardSidebarLabel"><?= htmlspecialchars(app_name(), ENT_QUOTES, 'UTF-8') ?></span>
+            </a>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close navigation"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <p class="nav-section-label">Main menu</p>
+        <nav class="side-nav nav flex-column">
+                <a class="nav-link" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" />
+                    </svg>
+                    <span>Overview</span>
+                </a>
+                <?php if (\App\Core\Auth::can('users.view') || \App\Core\Auth::can('roles.view') || \App\Core\Auth::can('permissions.view')): ?>
+                    <button class="nav-link nav-dropdown-toggle collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#adminSubmenu" aria-expanded="false" aria-controls="adminSubmenu">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 20h16M5 20V9l7-5 7 5v11M9 20v-6h6v6" />
+                        </svg>
+                        <span>Administration</span>
+                        <svg class="dropdown-chevron ms-auto" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m8 10 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <div class="collapse nav-submenu" id="adminSubmenu">
+                        <?php if (\App\Core\Auth::can('users.view')): ?>
+                            <a class="nav-link" href="<?= htmlspecialchars(url('admin'), ENT_QUOTES, 'UTF-8') ?>">Admin
+                                overview</a>
+                            <a class="nav-link"
+                                href="<?= htmlspecialchars(url('admin/users'), ENT_QUOTES, 'UTF-8') ?>">Users</a>
+                        <?php endif; ?>
+                        <?php if (\App\Core\Auth::can('roles.view')): ?>
+                            <a class="nav-link"
+                                href="<?= htmlspecialchars(url('admin/roles'), ENT_QUOTES, 'UTF-8') ?>">Roles</a>
+                        <?php endif; ?>
+                        <?php if (\App\Core\Auth::can('permissions.view')): ?>
+                            <a class="nav-link"
+                                href="<?= htmlspecialchars(url('admin/permissions'), ENT_QUOTES, 'UTF-8') ?>">Permissions</a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+                <a class="nav-link" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14 5h5v5M13 11l6-6M19 13v6H5V5h6" />
+                    </svg>
+                    <span>View website</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer mt-auto">
+                <div class="sidebar-user">
+                    <div class="user-avatar" aria-hidden="true">
+                        <?= htmlspecialchars(strtoupper(substr($user['name'], 0, 1)), ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="min-w-0">
+                        <strong
+                            class="d-block text-truncate"><?= htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') ?></strong>
+                        <span class="small"><?= htmlspecialchars($user['role_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                    </div>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="theme-toggle sidebar-action" type="button" aria-label="Switch color theme">
+                        <?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?>
+                        <span class="theme-label">Dark mode</span>
+                    </button>
+                    <form method="post" action="<?= htmlspecialchars(url('logout'), ENT_QUOTES, 'UTF-8') ?>">
+                        <?= csrf_field() ?>
+                        <button class="sidebar-action sidebar-action-danger" type="submit">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M10 17l5-5-5-5M15 12H3M14 4h6v16h-6" />
+                            </svg>
+                            <span>Log out</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-        <nav class="side-nav nav nav-pills flex-column">
-            <a class="nav-link" href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>">Overview</a>
-            <?php if (\App\Core\Auth::can('users.view')): ?>
-                <a class="nav-link" href="<?= htmlspecialchars(url('admin'), ENT_QUOTES, 'UTF-8') ?>">Admin area</a>
-            <?php endif; ?>
-            <?php if (\App\Core\Auth::can('users.view')): ?>
-                <a class="nav-link" href="<?= htmlspecialchars(url('admin/users'), ENT_QUOTES, 'UTF-8') ?>">Users</a>
-            <?php endif; ?>
-            <?php if (\App\Core\Auth::can('roles.view')): ?>
-                <a class="nav-link" href="<?= htmlspecialchars(url('admin/roles'), ENT_QUOTES, 'UTF-8') ?>">Roles</a>
-            <?php endif; ?>
-            <?php if (\App\Core\Auth::can('permissions.view')): ?>
-                <a class="nav-link" href="<?= htmlspecialchars(url('admin/permissions'), ENT_QUOTES, 'UTF-8') ?>">Permissions</a>
-            <?php endif; ?>
-            <a class="nav-link" href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">View website</a>
-        </nav>
-        <form class="mt-auto pt-4" method="post" action="<?= htmlspecialchars(url('logout'), ENT_QUOTES, 'UTF-8') ?>">
-            <?= csrf_field() ?>
-            <button class="btn btn-outline-danger w-100" type="submit">Log out</button>
-        </form>
-        <button class="theme-toggle btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
-                type="button"
-                aria-label="Switch color theme"><?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?><span
-                    class="theme-label">Dark mode</span></button>
-    </div>
-</aside>
-<main class="dashboard-main"><?= $content ?></main>
-<?php require __DIR__ . '/../partials/toasts.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.5/js/dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap5.min.js"></script>
-<script src="<?= htmlspecialchars(url('assets/js/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+    </aside>
+    <main class="dashboard-main"><?= $content ?></main>
+    <?php require __DIR__ . '/../partials/toasts.php'; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= htmlspecialchars(url('assets/js/app.js') . '?v=' . filemtime(BASE_PATH . '/public/assets/js/app.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
+
 </html>

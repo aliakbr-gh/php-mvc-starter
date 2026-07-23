@@ -9,10 +9,9 @@ final class Request
     public function __construct(
         private readonly string $method,
         private readonly string $path,
-        private readonly array  $query,
-        private readonly array  $body,
-    )
-    {
+        private readonly array $query,
+        private readonly array $body,
+    ) {
     }
 
     public static function capture(): self

@@ -60,7 +60,7 @@ final class Role extends Model
         $query->bindValue(':offset', ($page - 1) * $perPage, PDO::PARAM_INT);
         $query->execute();
 
-        return ['items' => $query->fetchAll(), 'total' => (int)$count->fetchColumn()];
+        return ['items' => $query->fetchAll(), 'total' => (int) $count->fetchColumn()];
     }
 
     public function create(string $name, string $slug, array $permissions): int
@@ -71,7 +71,7 @@ final class Role extends Model
             $this->db()
                 ->prepare('INSERT INTO roles (name, slug) VALUES (:name, :slug)')
                 ->execute(compact('name', 'slug'));
-            $id = (int)$this->db()->lastInsertId();
+            $id = (int) $this->db()->lastInsertId();
             $this->syncPermissions($id, $permissions);
             $this->db()->commit();
 

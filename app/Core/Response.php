@@ -8,10 +8,9 @@ final class Response
 {
     public function __construct(
         private readonly string $body,
-        private readonly int    $status = 200,
-        private readonly array  $headers = [],
-    )
-    {
+        private readonly int $status = 200,
+        private readonly array $headers = [],
+    ) {
     }
 
     public static function html(string $body, int $status = 200): self
@@ -21,7 +20,7 @@ final class Response
 
     public static function json(array $data, int $status = 200): self
     {
-        return new self((string)json_encode($data, JSON_THROW_ON_ERROR), $status, ['Content-Type' => 'application/json']);
+        return new self((string) json_encode($data, JSON_THROW_ON_ERROR), $status, ['Content-Type' => 'application/json']);
     }
 
     public static function redirect(string $url, int $status = 302): self

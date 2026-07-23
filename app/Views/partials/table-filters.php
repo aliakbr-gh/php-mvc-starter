@@ -1,14 +1,14 @@
 <form class="row g-2 align-items-center justify-content-between mb-3" method="get"
-      action="<?= htmlspecialchars(url($baseUrl), ENT_QUOTES, 'UTF-8') ?>">
+    action="<?= htmlspecialchars(url($baseUrl), ENT_QUOTES, 'UTF-8') ?>">
     <div class="col-12 col-md-auto">
         <div class="input-group">
             <input class="form-control" type="search" name="search"
-                   value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>"
-                   placeholder="Search records…" aria-label="Search records">
+                value="<?= htmlspecialchars($search, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search records…"
+                aria-label="Search records">
             <button class="btn btn-primary" type="submit">Search</button>
             <?php if ($search !== ''): ?>
                 <a class="btn btn-outline-secondary"
-                   href="<?= htmlspecialchars(url($baseUrl) . '?' . http_build_query(['per_page' => $perPage]), ENT_QUOTES, 'UTF-8') ?>">Clear</a>
+                    href="<?= htmlspecialchars(url($baseUrl) . '?' . http_build_query(['per_page' => $perPage]), ENT_QUOTES, 'UTF-8') ?>">Clear</a>
             <?php endif; ?>
         </div>
     </div>

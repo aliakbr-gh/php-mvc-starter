@@ -14,11 +14,12 @@
         ['Member since', date('M Y', strtotime($user['created_at']))],
     ];
     foreach ($stats as [$label, $value]):
-    ?>
+        ?>
         <div class="col-12 col-md-4">
             <article class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <span class="small text-uppercase text-body-secondary"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span>
+                    <span
+                        class="small text-uppercase text-body-secondary"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span>
                     <strong class="d-block mt-2 text-break"><?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?></strong>
                 </div>
             </article>
@@ -29,7 +30,8 @@
 <section class="card shadow-sm mb-4">
     <div class="card-body">
         <h2 class="h5">Role-based access is active</h2>
-        <p class="text-body-secondary mb-0">Your sidebar is generated from your role. Administrators see the protected admin area; standard users do not.</p>
+        <p class="text-body-secondary mb-0">Your sidebar is generated from your role. Administrators see the protected
+            admin area; standard users do not.</p>
     </div>
 </section>
 
@@ -37,7 +39,9 @@
     <div class="card-header bg-body d-flex justify-content-between align-items-start gap-3 py-3">
         <div>
             <h2 class="h5 mb-1">Recent activity</h2>
-            <p class="small text-body-secondary mb-0"><?= \App\Core\Auth::hasRole('admin') ? 'Latest activity from every user.' : 'Your latest account activity.' ?></p>
+            <p class="small text-body-secondary mb-0">
+                <?= \App\Core\Auth::hasRole('admin') ? 'Latest activity from every user.' : 'Your latest account activity.' ?>
+            </p>
         </div>
         <span class="badge text-bg-secondary"><?= count($activities) ?> events</span>
     </div>
@@ -48,7 +52,8 @@
                     <span class="activity-dot flex-shrink-0"></span>
                     <div>
                         <strong class="d-block"><?= htmlspecialchars($activity['activity'], ENT_QUOTES, 'UTF-8') ?></strong>
-                        <time class="small text-body-secondary" datetime="<?= htmlspecialchars($activity['created_at'], ENT_QUOTES, 'UTF-8') ?>">
+                        <time class="small text-body-secondary"
+                            datetime="<?= htmlspecialchars($activity['created_at'], ENT_QUOTES, 'UTF-8') ?>">
                             <?= htmlspecialchars(date('M j, Y · g:i A', strtotime($activity['created_at'])), ENT_QUOTES, 'UTF-8') ?>
                         </time>
                     </div>

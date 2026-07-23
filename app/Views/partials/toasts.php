@@ -8,12 +8,12 @@ unset($_SESSION['_flash']); ?>
                 ? $toast['type']
                 : ($toast['type'] === 'error' ? 'danger' : 'secondary');
             ?>
-            <div class="toast border-0 text-bg-<?= htmlspecialchars($type, ENT_QUOTES, 'UTF-8') ?>"
-                 role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4500">
+            <div class="toast border-0 text-bg-<?= htmlspecialchars($type, ENT_QUOTES, 'UTF-8') ?>" role="alert"
+                aria-live="assertive" aria-atomic="true" data-bs-delay="4500">
                 <div class="d-flex">
                     <div class="toast-body"><?= htmlspecialchars($toast['message'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                            data-bs-dismiss="toast" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
                 </div>
             </div>
         <?php endforeach; ?>

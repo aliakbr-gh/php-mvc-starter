@@ -13,13 +13,16 @@ final class RateLimiter
     /** @return array{allowed: bool, retry_after: int} */
     public function attempt(string $key): array
     {
-        if (!($this->config['enabled'] ?? true)) return ['allowed' => true, 'retry_after' => 0];
+        if (!($this->config['enabled'] ?? true))
+            return ['allowed' => true, 'retry_after' => 0];
 
         $directory = $this->config['storage_path'];
-        if (!is_dir($directory)) mkdir($directory, 0775, true);
+        if (!is_dir($directory))
+            mkdir($directory, 0775, true);
         $file = $directory . '/' . hash('sha256', $key) . '.json';
         $handle = fopen($file, 'c+');
-        if ($handle === false) return ['allowed' => true, 'retry_after' => 0];
+        if ($handle === false)
+            return ['allowed' => true, 'retry_after' => 0];
 
         flock($handle, LOCK_EX);
         $raw = stream_get_contents($handle);

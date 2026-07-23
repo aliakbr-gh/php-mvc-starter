@@ -32,7 +32,8 @@ final class UserController extends Controller
     {
         $r = Request::capture();
         $data = $this->validate($r, true);
-        if ($data === null) return Response::redirect(url('admin/users/create'));
+        if ($data === null)
+            return Response::redirect(url('admin/users/create'));
         try {
             $id = (new User())->createManaged(...$data);
         } catch (PDOException $e) {
@@ -45,20 +46,23 @@ final class UserController extends Controller
 
     public function edit(string $id): Response
     {
-        $record = (new User())->findById((int)$id);
-        if (!$record) return $this->missing();
+        $record = (new User())->findById((int) $id);
+        if (!$record)
+            return $this->missing();
         return $this->form($record);
     }
 
     public function update(string $id): Response
     {
         $r = Request::capture();
-        $record = (new User())->findById((int)$id);
-        if (!$record) return $this->missing();
+        $record = (new User())->findById((int) $id);
+        if (!$record)
+            return $this->missing();
         $data = $this->validate($r, false);
-        if ($data === null) return Response::redirect(url('admin/users/' . $id . '/edit'));
+        if ($data === null)
+            return Response::redirect(url('admin/users/' . $id . '/edit'));
         try {
-            (new User())->update((int)$id, $data[0], $data[1], $data[3], $data[2] ?: null);
+            (new User())->update((int) $id, $data[0], $data[1], $data[3], $data[2] ?: null);
         } catch (PDOException $e) {
             return $this->databaseError($e, url('admin/users/' . $id . '/edit'));
         }
@@ -69,13 +73,14 @@ final class UserController extends Controller
 
     public function delete(string $id): Response
     {
-        if ((int)$id === (int)Auth::user()['id']) {
+        if ((int) $id === (int) Auth::user()['id']) {
             flash('error', 'You cannot delete your own account.');
             return Response::redirect(url('admin/users'));
         }
-        $record = (new User())->findById((int)$id);
-        if (!$record) return $this->missing();
-        (new User())->delete((int)$id);
+        $record = (new User())->findById((int) $id);
+        if (!$record)
+            return $this->missing();
+        (new User())->delete((int) $id);
         ActivityLogger::log(Auth::user()['name'] . ' deleted user ' . $record['email'] . ' from ' . Request::capture()->ip());
         flash('success', 'User deleted.');
         return Response::redirect(url('admin/users'));
@@ -88,10 +93,10 @@ final class UserController extends Controller
 
     private function validate(Request $r, bool $passwordRequired): ?array
     {
-        $name = trim((string)$r->input('name'));
-        $email = trim((string)$r->input('email'));
-        $password = (string)$r->input('password');
-        $role = (int)$r->input('role_id');
+        $name = trim((string) $r->input('name'));
+        $email = trim((string) $r->input('email'));
+        $password = (string) $r->input('password');
+        $role = (int) $r->input('role_id');
         if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || ($passwordRequired && strlen($password) < 8) || ($password !== '' && strlen($password) < 8) || $role < 1) {
             flash('error', 'Enter valid details; passwords must be at least 8 characters.');
             return null;
@@ -101,14 +106,15 @@ final class UserController extends Controller
 
     private function filters(Request $r): array
     {
-        $per = (int)$r->query('per_page', 10);
-        if (!in_array($per, [10, 25, 50], true)) $per = 10;
-        return [trim((string)$r->query('search', '')), max(1, (int)$r->query('page', 1)), $per];
+        $per = (int) $r->query('per_page', 10);
+        if (!in_array($per, [10, 25, 50], true))
+            $per = 10;
+        return [trim((string) $r->query('search', '')), max(1, (int) $r->query('page', 1)), $per];
     }
 
     private function databaseError(PDOException $e, string $back): Response
     {
-        flash('error', (string)$e->getCode() === '23000' ? 'Email already exists or the selected role is invalid.' : 'Could not save the user.');
+        flash('error', (string) $e->getCode() === '23000' ? 'Email already exists or the selected role is invalid.' : 'Could not save the user.');
         return Response::redirect($back);
     }
 

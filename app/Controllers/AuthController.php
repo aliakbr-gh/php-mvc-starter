@@ -28,8 +28,8 @@ final class AuthController extends Controller
     public function login(): Response
     {
         $request = Request::capture();
-        $email = trim((string)$request->input('email'));
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !Auth::attempt($email, (string)$request->input('password'))) {
+        $email = trim((string) $request->input('email'));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !Auth::attempt($email, (string) $request->input('password'))) {
             Logger::warning('Failed login', ['email' => $email, 'ip' => $request->ip()]);
             flash('error', 'The email or password is incorrect.');
             return Response::redirect(url('login'));
@@ -37,7 +37,7 @@ final class AuthController extends Controller
         Logger::info('User logged in', ['user_id' => Auth::user()['id']]);
         ActivityLogger::log(
             Auth::user()['name'] . ' has been logged in from ' . $request->ip(),
-            (int)Auth::user()['id']
+            (int) Auth::user()['id']
         );
         flash('success', 'Welcome back, ' . Auth::user()['name'] . '!');
         return Response::redirect(url('dashboard'));
@@ -46,9 +46,9 @@ final class AuthController extends Controller
     public function register(): Response
     {
         $request = Request::capture();
-        $name = trim((string)$request->input('name'));
-        $email = trim((string)$request->input('email'));
-        $password = (string)$request->input('password');
+        $name = trim((string) $request->input('name'));
+        $email = trim((string) $request->input('email'));
+        $password = (string) $request->input('password');
         if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
             flash('error', 'Use a valid name, email, and password of at least 8 characters.');
             return Response::redirect(url('register'));
@@ -56,9 +56,7 @@ final class AuthController extends Controller
         try {
             $id = (new User())->create($name, $email, $password);
         } catch (PDOException $exception) {
-            flash('error', $exception->getMessage());
-            dd($exception);
-            if ((string)$exception->getCode() === '23000') {
+            if ((string) $exception->getCode() === '23000') {
                 flash('error', 'That email address is already registered.');
                 return Response::redirect(url('register'));
             }
@@ -78,7 +76,7 @@ final class AuthController extends Controller
         if ($user !== null) {
             ActivityLogger::log(
                 $user['name'] . ' has been logged out from ' . Request::capture()->ip(),
-                (int)$user['id']
+                (int) $user['id']
             );
         }
         Auth::logout();

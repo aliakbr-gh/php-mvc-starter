@@ -42,11 +42,12 @@ final class Router
             }
 
             $guard = $this->guard($route['middleware'], $request);
-            if ($guard !== null) return $guard;
+            if ($guard !== null)
+                return $guard;
 
             $parameters = array_map('urldecode', array_filter(
                 $matches,
-                static fn (string|int $key): bool => is_string($key),
+                static fn(string|int $key): bool => is_string($key),
                 ARRAY_FILTER_USE_KEY
             ));
 
@@ -67,15 +68,20 @@ final class Router
                 flash('warning', 'Please log in to continue.');
                 return Response::redirect(url('login'));
             }
-            if ($rule === 'guest' && Auth::check()) return Response::redirect(url('dashboard'));
+            if ($rule === 'guest' && Auth::check())
+                return Response::redirect(url('dashboard'));
             if (str_starts_with($rule, 'role:')) {
                 $roles = explode(',', substr($rule, 5));
-                if (!Auth::check()) return Response::redirect(url('login'));
-                if (!Auth::hasRole(...$roles)) return Response::html(View::render('errors/403'), 403);
+                if (!Auth::check())
+                    return Response::redirect(url('login'));
+                if (!Auth::hasRole(...$roles))
+                    return Response::html(View::render('errors/403'), 403);
             }
             if (str_starts_with($rule, 'permission:')) {
-                if (!Auth::check()) return Response::redirect(url('login'));
-                if (!Auth::can(substr($rule, 11))) return Response::html(View::render('errors/403'), 403);
+                if (!Auth::check())
+                    return Response::redirect(url('login'));
+                if (!Auth::can(substr($rule, 11)))
+                    return Response::html(View::render('errors/403'), 403);
             }
         }
         return null;
