@@ -19,14 +19,18 @@
 <?php
 $authenticated = \App\Core\Auth::check();
 $user = $user ?? \App\Core\Auth::user();
+$navigationStyle = $authenticated
+    ? \App\Core\AppSettings::navigationStyle()
+    : \App\Core\AppSettings::NAVIGATION_SIDEBAR;
 ?>
-<body class="<?= $authenticated ? 'dashboard-body' : '' ?>">
+<body class="<?= $authenticated ? 'dashboard-body navigation-' . e($navigationStyle) : '' ?>">
     <div class="page-loader" role="status" aria-label="Loading page">
         <div class="spinner-border text-primary" aria-hidden="true"></div>
         <span class="visually-hidden">Loading…</span>
     </div>
 
     <?php if ($authenticated): ?>
+        <?php if ($navigationStyle === \App\Core\AppSettings::NAVIGATION_SIDEBAR): ?>
         <header class="dashboard-topbar navbar bg-body sticky-top">
             <div class="container-fluid px-3 px-lg-4">
                 <button class="sidebar-trigger btn btn-light d-inline-flex align-items-center justify-content-center"
@@ -62,7 +66,7 @@ $user = $user ?? \App\Core\Auth::user();
             </div>
             <div class="offcanvas-body d-flex flex-column">
                 <p class="nav-section-label">Main menu</p>
-                <nav class="side-nav nav flex-column">
+                <nav class="side-nav app-navigation nav flex-column">
                     <a class="nav-link" href="<?= e(url('dashboard')) ?>">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" />
@@ -94,6 +98,12 @@ $user = $user ?? \App\Core\Auth::user();
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
+                    <a class="nav-link" href="<?= e(url('settings')) ?>">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08A1.7 1.7 0 0 0 8.97 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.52-1H3v-4h.08A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.97 4.6 1.7 1.7 0 0 0 10 3.08V3h4v.08a1.7 1.7 0 0 0 1.03 1.52 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.52 1H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" />
+                        </svg>
+                        <span>App Settings</span>
+                    </a>
                 </nav>
 
                 <div class="sidebar-footer mt-auto">
@@ -125,6 +135,61 @@ $user = $user ?? \App\Core\Auth::user();
                 </div>
             </div>
         </aside>
+        <?php else: ?>
+            <header class="header-navigation navbar navbar-expand-lg bg-body sticky-top border-bottom">
+                <div class="container-fluid px-3 px-lg-4">
+                    <a class="navbar-brand brand d-flex align-items-center gap-2" href="<?= e(url('dashboard')) ?>">
+                        <?php if (logo_url()): ?>
+                            <img src="<?= e(logo_url()) ?>"
+                                alt="<?= e((string) config('branding.logo_alt', app_name())) ?>">
+                        <?php endif; ?>
+                        <span><?= e(app_name()) ?></span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#headerNavigation" aria-controls="headerNavigation"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="headerNavigation">
+                        <nav class="app-navigation navbar-nav me-auto mb-2 mb-lg-0">
+                            <a class="nav-link" href="<?= e(url('dashboard')) ?>">Dashboard</a>
+                            <?php if (\App\Core\Auth::can('users.view') || \App\Core\Auth::can('roles.view') || \App\Core\Auth::can('permissions.view')): ?>
+                                <div class="nav-item dropdown">
+                                    <button class="nav-link dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Access Control
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <?php if (\App\Core\Auth::can('users.view')): ?>
+                                            <li><a class="dropdown-item" href="<?= e(url('admin/users')) ?>">Users</a></li>
+                                        <?php endif; ?>
+                                        <?php if (\App\Core\Auth::can('roles.view')): ?>
+                                            <li><a class="dropdown-item" href="<?= e(url('admin/roles')) ?>">Roles</a></li>
+                                        <?php endif; ?>
+                                        <?php if (\App\Core\Auth::can('permissions.view')): ?>
+                                            <li><a class="dropdown-item" href="<?= e(url('admin/permissions')) ?>">Permissions</a></li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+                            <a class="nav-link" href="<?= e(url('settings')) ?>">App Settings</a>
+                        </nav>
+                        <div class="header-navigation-actions d-flex align-items-center gap-2">
+                            <button class="theme-toggle btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2"
+                                type="button" aria-label="Switch color theme">
+                                <?php require BASE_PATH . '/app/Views/partials/theme-icons.php'; ?>
+                                <span class="theme-label">Dark mode</span>
+                            </button>
+                            <span class="small text-body-secondary"><?= e($user['name']) ?></span>
+                            <form method="post" action="<?= e(url('logout')) ?>">
+                                <?= csrf_field() ?>
+                                <button class="btn btn-outline-danger btn-sm" type="submit">Log out</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        <?php endif; ?>
 
         <main class="dashboard-main"><?= $content ?></main>
         <?php require __DIR__ . '/../partials/confirm-modal.php'; ?>

@@ -8,6 +8,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\UserController;
 use App\Controllers\RoleController;
 use App\Controllers\PermissionController;
+use App\Controllers\SettingsController;
 
 $router = $app->router();
 
@@ -19,6 +20,8 @@ $router->get('/register', [AuthController::class, 'registerForm'], ['guest']);
 $router->post('/register', [AuthController::class, 'register'], ['guest']);
 $router->post('/logout', [AuthController::class, 'logout'], ['auth']);
 $router->get('/dashboard', [DashboardController::class, 'index'], ['auth']);
+$router->get('/settings', [SettingsController::class, 'index'], ['auth']);
+$router->post('/settings', [SettingsController::class, 'update'], ['auth']);
 $router->get('/admin', [DashboardController::class, 'admin'], ['auth', 'permission:users.view']);
 
 $router->get('/admin/users', [UserController::class, 'index'], ['auth', 'permission:users.view']);

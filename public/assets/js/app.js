@@ -82,7 +82,7 @@ if (confirmModalElement && window.bootstrap) {
 
 const normalizePath = (path) => path.replace(/\/+$/, "") || "/";
 const currentPath = normalizePath(window.location.pathname);
-const navLinks = [...document.querySelectorAll(".side-nav a[href]")];
+const navLinks = [...document.querySelectorAll(".app-navigation a[href]")];
 const matchingLinks = navLinks
   .map((link) => ({ link, path: normalizePath(new URL(link.href).pathname) }))
   .filter(
@@ -106,6 +106,11 @@ if (matchingLinks.length) {
       toggle.classList.remove("collapsed");
       toggle.setAttribute("aria-expanded", "true");
     }
+  }
+
+  const dropdown = activeLink.closest(".dropdown");
+  if (dropdown) {
+    dropdown.querySelector(".dropdown-toggle")?.classList.add("active");
   }
 }
 
