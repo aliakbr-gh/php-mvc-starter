@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use JsonException;
+
 final class Request
 {
     public function __construct(
@@ -11,6 +13,9 @@ final class Request
         private readonly string $path,
         private readonly array $query,
         private readonly array $body,
+        private readonly string $rawBody = '',
+        private readonly mixed $jsonBody = null,
+        private readonly bool $jsonValid = false,
     ) {
     }
 
@@ -25,11 +30,35 @@ final class Request
             $uriPath = substr($uriPath, strlen($basePath)) ?: '/';
         }
 
+        $rawBody = (string) file_get_contents('php://input');
+        $contentType = strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0]));
+        $body = $_POST;
+        $jsonBody = null;
+        $jsonValid = false;
+
+        if ($contentType === 'application/json' || str_ends_with($contentType, '+json')) {
+            try {
+                $jsonBody = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
+                $jsonValid = true;
+
+                if (is_array($jsonBody)) {
+                    $body = $jsonBody;
+                }
+            } catch (JsonException) {
+                $jsonBody = null;
+            }
+        } elseif ($body === [] && $rawBody !== '' && $contentType === 'application/x-www-form-urlencoded') {
+            parse_str($rawBody, $body);
+        }
+
         return new self(
             strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET'),
             '/' . ltrim($uriPath, '/'),
             $_GET,
-            $_POST,
+            $body,
+            $rawBody,
+            $jsonBody,
+            $jsonValid,
         );
     }
 
@@ -51,6 +80,26 @@ final class Request
     public function input(string $key, mixed $default = null): mixed
     {
         return $this->body[$key] ?? $default;
+    }
+
+    public function body(): array
+    {
+        return $this->body;
+    }
+
+    public function raw(): string
+    {
+        return $this->rawBody;
+    }
+
+    public function json(mixed $default = null): mixed
+    {
+        return $this->jsonValid ? $this->jsonBody : $default;
+    }
+
+    public function hasValidJson(): bool
+    {
+        return $this->jsonValid;
     }
 
     public function all(): array

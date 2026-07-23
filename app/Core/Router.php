@@ -21,6 +21,16 @@ final class Router
         return $this->add('POST', $path, $handler, $middleware);
     }
 
+    public function put(string $path, callable|array $handler, array $middleware = []): self
+    {
+        return $this->add('PUT', $path, $handler, $middleware);
+    }
+
+    public function delete(string $path, callable|array $handler, array $middleware = []): self
+    {
+        return $this->add('DELETE', $path, $handler, $middleware);
+    }
+
     public function add(string $method, string $path, callable|array $handler, array $middleware = []): self
     {
         $path = '/' . trim($path, '/');
@@ -60,7 +70,8 @@ final class Router
 
     private function guard(array $middleware, Request $request): ?Response
     {
-        if ($request->method() === 'POST' && !hash_equals($_SESSION['_token'] ?? '', (string) $request->input('_token', ''))) {
+        if (in_array($request->method(), ['POST', 'PUT', 'DELETE'], true)
+            && !hash_equals($_SESSION['_token'] ?? '', (string) $request->input('_token', ''))) {
             return Response::html(View::render('errors/419'), 419);
         }
         foreach ($middleware as $rule) {

@@ -36,6 +36,8 @@ workflow, read `Project.md`.
 - Date-wise application logs
 - Custom 403, 404, 419, 429, and 500 pages
 - Flash messages displayed as toast notifications
+- JSON request body support
+- Reusable cURL-based HTTP client for third-party APIs
 - Lightweight top loader and page fade
 - Global Laravel-style `dd()` helper
 

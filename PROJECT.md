@@ -111,6 +111,70 @@ final class ProductController extends Controller
 Keep HTTP concerns in controllers. Do not put HTML or large SQL queries directly in
 a controller.
 
+### JSON requests
+
+`Request::capture()` automatically decodes requests whose `Content-Type` is
+`application/json` or ends in `+json`. JSON object fields use the same `input()`
+method as form fields:
+
+```php
+$request = Request::capture();
+
+$name = $request->input('name');
+$payload = $request->json();
+$rawPayload = $request->raw();
+
+if (!$request->hasValidJson()) {
+    return Response::json(['error' => 'Invalid JSON'], 400);
+}
+```
+
+Form and JSON body values are returned by `body()`. `all()` combines query-string
+values with body values, with body values taking precedence.
+
+The router also supports incoming PUT and DELETE routes:
+
+```php
+$router->put('/api/products/{id}', [ProductController::class, 'update']);
+$router->delete('/api/products/{id}', [ProductController::class, 'delete']);
+```
+
+### Calling third-party APIs
+
+Use `HttpClient` for outgoing GET, POST, PUT, and DELETE requests:
+
+```php
+use App\Core\HttpClient;
+
+$client = new HttpClient([
+    'Authorization' => 'Bearer ' . $apiToken,
+]);
+
+$response = $client->get('https://api.example.com/products', [
+    'query' => ['page' => 1],
+]);
+
+$created = $client->post('https://api.example.com/products', [
+    'json' => ['name' => 'Example'],
+]);
+
+$updated = $client->put('https://api.example.com/products/10', [
+    'json' => ['name' => 'Updated example'],
+]);
+
+$deleted = $client->delete('https://api.example.com/products/10');
+
+if ($response->successful()) {
+    $products = $response->json([]);
+}
+```
+
+Request options include `headers`, `query`, `json`, `form`, `body`, `timeout`,
+`connect_timeout`, `follow_redirects`, `max_redirects`, `verify`, and
+`basic_auth`. Transport failures throw `RuntimeException`; HTTP 4xx and 5xx
+responses remain available through `status()`, `clientError()`, and
+`serverError()`.
+
 ## 3. Model
 
 A model reads and writes database records. Models live in `app/Models` and extend
