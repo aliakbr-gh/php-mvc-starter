@@ -23,7 +23,7 @@ require BASE_PATH . '/app/Views/partials/table-filters.php';
             <tbody>
                 <?php foreach ($result['items'] as $item): ?>
                     <tr>
-                        <td><strong><?= e($item['name']) ?></strong><small><?= e($item['email']) ?></small>
+                        <td><strong><?= e($item['name']) ?></strong><small><?= e($item['username']) ?></small>
                         </td>
                         <td><span
                                 class="badge text-bg-light border"><?= e($item['role_name']) ?></span>

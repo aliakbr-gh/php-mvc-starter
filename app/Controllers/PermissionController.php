@@ -98,6 +98,11 @@ final class PermissionController extends AdminController
             return $this->missing('Permission', 'permissions');
         }
 
+        if ($record['slug'] === 'sudo') {
+            flash('error', 'The sudo permission cannot be deleted.');
+            return Response::redirect(url('permissions'));
+        }
+
         (new Permission())->delete((int) $id);
         ActivityLogger::log(Auth::user()['name'] . ' deleted permission ' . $record['slug'] . ' from ' . Request::capture()->ip());
         flash('success', 'Permission deleted.');

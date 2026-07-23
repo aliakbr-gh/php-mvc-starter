@@ -22,7 +22,7 @@ workflow, read `Project.md`.
 - GET and POST routing with dynamic parameters
 - One application layout with a permission-aware sidebar
 - PDO database connection with native prepared statements
-- Registration, login, logout, and sessions
+- Username login, logout, and sessions
 - Secure password hashing and verification
 - CSRF protection on every POST route
 - Normalized roles and permissions
@@ -94,18 +94,44 @@ This project is configured for MAMP, but it can run on any Apache/PHP/MySQL stac
    http://localhost:8888/coremvc/
    ```
 
-6. Register a normal account at `/register`.
+6. Run the database seeder described below.
 
-7. Promote the first account to Administrator:
+7. Log in with the seeded administrator account.
 
-   ```sql
-   UPDATE users
-   SET role_id = (SELECT id FROM roles WHERE slug = 'admin')
-   WHERE email = 'admin@example.com';
-   ```
+## Database seeder
 
-8. Log out and log in again so the new role and permissions are loaded into the
-   session request.
+After importing `database/schema.sql`, run the idempotent seeder from the project
+root:
+
+```bash
+php database/seed.php
+```
+
+The default administrator credentials are:
+
+```text
+Username: admin
+Password: Admin@12345
+```
+
+Change the password after the first login. For custom credentials, set environment
+variables for the command:
+
+```bash
+ADMIN_NAME="admin" \
+ADMIN_USERNAME="owner" \
+ADMIN_PASSWORD="use-a-strong-password" \
+php database/seed.php
+```
+
+The seeder can be run multiple times. It creates or updates the application
+permissions and `admin`/`user` roles without duplicating records. If the admin
+username already exists, it assigns the Administrator role but does not overwrite
+the existing password. On older installations, it also renames `users.email` to
+`users.username`; existing values remain valid usernames until changed.
+
+The Administrator role receives the `sudo` permission. Authorization treats
+`sudo` as a wildcard, so it grants every current and future permission.
 
 > `database/schema.sql` is the fresh-install schema. Back up an existing database
 > before changing its tables or importing schema changes.
@@ -247,7 +273,6 @@ Application routes do not contain `.php`:
 
 ```text
 /login
-/register
 /dashboard
 /users
 /roles
@@ -409,7 +434,7 @@ return $this->view('reports/index', [
 ```
 
 Authenticated users see the permission-aware sidebar. Guest pages such as login
-and registration use the same layout without the sidebar.
+use the same layout without the sidebar.
 
 Escape output that may contain user-controlled data:
 
@@ -441,7 +466,7 @@ Useful methods:
 Auth::check();
 Auth::guest();
 Auth::user();
-Auth::attempt($email, $password);
+Auth::attempt($username, $password);
 Auth::login($userId);
 Auth::logout();
 Auth::hasRole('admin');
@@ -451,7 +476,7 @@ Auth::can('users.update');
 Passwords are created with `password_hash()` and checked using
 `password_verify()`. The session ID is regenerated on login and logout.
 
-Registration always assigns the role whose slug is `user`.
+Accounts are created by authorized users through the Users module.
 
 ## Role-based access control
 
@@ -534,9 +559,9 @@ URL: `/users`
 
 The module can:
 
-- Search by name, email, or role
+- Search by name, username, or role
 - Create accounts
-- Change names and email addresses
+- Change names and usernames
 - Assign roles
 - Optionally replace a password
 - Delete accounts
@@ -757,7 +782,7 @@ to the daily log.
 
 This is a lightweight educational/application starter. Before handling sensitive or
 high-value production data, add automated tests, stronger validation rules, account
-recovery, email verification, audit retention policies, HTTPS enforcement, secure
+account recovery, audit retention policies, HTTPS enforcement, secure
 secret management, database backups, and deployment monitoring.
 
 ## Creating another permission-controlled CRUD module
@@ -789,7 +814,7 @@ For a new `reports` module:
 - Back up MySQL regularly
 - Use a dedicated database user with minimum required privileges
 - Review rate-limit settings for expected traffic
-- Add account recovery and email verification if required
+- Add an account recovery process if required
 - Add automated tests before deployment
 
 ## License

@@ -10,30 +10,16 @@ final class User extends Model
 {
     public function findById(int $id): ?array
     {
-        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = :id LIMIT 1');
+        $statement = $this->db()->prepare('SELECT u.id, u.name, u.username, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = :id LIMIT 1');
         $statement->execute(['id' => $id]);
         return $statement->fetch() ?: null;
     }
 
-    public function findByEmail(string $email): ?array
+    public function findByUsername(string $username): ?array
     {
-        $statement = $this->db()->prepare('SELECT u.id, u.name, u.email, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.email = :email LIMIT 1');
-        $statement->execute(['email' => strtolower(trim($email))]);
+        $statement = $this->db()->prepare('SELECT u.id, u.name, u.username, u.password, u.role_id, u.created_at, u.updated_at, r.name AS role_name, r.slug AS role_slug FROM users u JOIN roles r ON r.id = u.role_id WHERE u.username = :username LIMIT 1');
+        $statement->execute(['username' => strtolower(trim($username))]);
         return $statement->fetch() ?: null;
-    }
-
-    public function create(string $name, string $email, string $password): int
-    {
-        $statement = $this->db()->prepare(
-            'INSERT INTO users (name, email, password, role_id) SELECT :name, :email, :password, id FROM roles WHERE slug = :role LIMIT 1'
-        );
-        $statement->execute([
-            'name' => trim($name),
-            'email' => strtolower(trim($email)),
-            'password' => password_hash($password, PASSWORD_DEFAULT),
-            'role' => 'user',
-        ]);
-        return (int) $this->db()->lastInsertId();
     }
 
     public function permissions(int $userId): array
@@ -43,11 +29,11 @@ final class User extends Model
         return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-    public function createManaged(string $name, string $email, string $password, int $roleId): int
+    public function createManaged(string $name, string $username, string $password, int $roleId): int
     {
-        $this->db()->prepare('INSERT INTO users(name,email,password,role_id) VALUES(:name,:email,:password,:role_id)')->execute([
+        $this->db()->prepare('INSERT INTO users(name,username,password,role_id) VALUES(:name,:username,:password,:role_id)')->execute([
             'name' => trim($name),
-            'email' => strtolower(trim($email)),
+            'username' => strtolower(trim($username)),
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'role_id' => $roleId,
         ]);
@@ -56,17 +42,17 @@ final class User extends Model
 
     public function paginate(string $search, int $page, int $perPage): array
     {
-        $where = $search === '' ? '' : ' WHERE u.name LIKE :search_name OR u.email LIKE :search_email OR r.name LIKE :search_role';
+        $where = $search === '' ? '' : ' WHERE u.name LIKE :search_name OR u.username LIKE :search_username OR r.name LIKE :search_role';
         $count = $this->db()->prepare('SELECT COUNT(*) FROM users u JOIN roles r ON r.id = u.role_id' . $where);
         if ($search !== '')
-            foreach ([':search_name', ':search_email', ':search_role'] as $key)
+            foreach ([':search_name', ':search_username', ':search_role'] as $key)
                 $count->bindValue($key, '%' . $search . '%');
         $count->execute();
         $total = (int) $count->fetchColumn();
         $offset = ($page - 1) * $perPage;
-        $query = $this->db()->prepare('SELECT u.id, u.name, u.email, u.role_id, u.created_at, u.updated_at, r.name AS role_name FROM users u JOIN roles r ON r.id = u.role_id' . $where . ' ORDER BY u.id DESC LIMIT :limit OFFSET :offset');
+        $query = $this->db()->prepare('SELECT u.id, u.name, u.username, u.role_id, u.created_at, u.updated_at, r.name AS role_name FROM users u JOIN roles r ON r.id = u.role_id' . $where . ' ORDER BY u.id DESC LIMIT :limit OFFSET :offset');
         if ($search !== '')
-            foreach ([':search_name', ':search_email', ':search_role'] as $key)
+            foreach ([':search_name', ':search_username', ':search_role'] as $key)
                 $query->bindValue($key, '%' . $search . '%');
         $query->bindValue(':limit', $perPage, \PDO::PARAM_INT);
         $query->bindValue(':offset', $offset, \PDO::PARAM_INT);
@@ -74,10 +60,10 @@ final class User extends Model
         return ['items' => $query->fetchAll(), 'total' => $total];
     }
 
-    public function update(int $id, string $name, string $email, int $roleId, ?string $password = null): void
+    public function update(int $id, string $name, string $username, int $roleId, ?string $password = null): void
     {
-        $sql = 'UPDATE users SET name = :name, email = :email, role_id = :role_id';
-        $values = ['id' => $id, 'name' => trim($name), 'email' => strtolower(trim($email)), 'role_id' => $roleId];
+        $sql = 'UPDATE users SET name = :name, username = :username, role_id = :role_id';
+        $values = ['id' => $id, 'name' => trim($name), 'username' => strtolower(trim($username)), 'role_id' => $roleId];
         if ($password !== null && $password !== '') {
             $sql .= ', password = :password';
             $values['password'] = password_hash($password, PASSWORD_DEFAULT);

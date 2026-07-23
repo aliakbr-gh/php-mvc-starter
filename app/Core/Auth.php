@@ -28,9 +28,9 @@ final class Auth
         return self::$user ??= (new User())->findById((int) $_SESSION['user_id']);
     }
 
-    public static function attempt(string $email, string $password): bool
+    public static function attempt(string $username, string $password): bool
     {
-        $user = (new User())->findByEmail($email);
+        $user = (new User())->findByUsername($username);
         if (!$user || !password_verify($password, $user['password']))
             return false;
         session_regenerate_id(true);
@@ -68,6 +68,7 @@ final class Auth
         if ($user === null)
             return false;
         self::$permissions ??= (new User())->permissions((int) $user['id']);
-        return in_array($permission, self::$permissions, true);
+        return in_array('sudo', self::$permissions, true)
+            || in_array($permission, self::$permissions, true);
     }
 }

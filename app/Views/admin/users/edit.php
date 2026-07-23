@@ -10,8 +10,9 @@
             <input class="form-control" id="name" name="name" value="<?= e($record['name']) ?>" required minlength="2">
         </div>
         <div>
-            <label class="form-label" for="email">Email</label>
-            <input class="form-control" id="email" type="email" name="email" value="<?= e($record['email']) ?>" required>
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" name="username" value="<?= e($record['username']) ?>"
+                required minlength="3" maxlength="50" pattern="[A-Za-z0-9._-]+">
         </div>
         <div>
             <label class="form-label" for="role">Role</label>

@@ -10,7 +10,7 @@
     <?php
     $stats = [
         ['Account', $user['name']],
-        ['Email', $user['email']],
+        ['Username', $user['username']],
         ['Member since', date('M Y', strtotime($user['created_at']))],
     ];
     foreach ($stats as [$label, $value]):

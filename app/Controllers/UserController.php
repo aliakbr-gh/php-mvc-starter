@@ -36,7 +36,7 @@ final class UserController extends AdminController
         try {
             $id = (new User())->createManaged(...$data);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('users/create'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
+            return $this->databaseError($e, url('users/create'), 'Username already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' created user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User created successfully.');
@@ -63,7 +63,7 @@ final class UserController extends AdminController
         try {
             (new User())->update((int) $id, $data[0], $data[1], $data[3], $data[2] ?: null);
         } catch (PDOException $e) {
-            return $this->databaseError($e, url('users/' . $id . '/edit'), 'Email already exists or the selected role is invalid.', 'Could not save the user.');
+            return $this->databaseError($e, url('users/' . $id . '/edit'), 'Username already exists or the selected role is invalid.', 'Could not save the user.');
         }
         ActivityLogger::log(Auth::user()['name'] . ' updated user ' . $data[1] . ' from ' . $r->ip());
         flash('success', 'User updated successfully.');
@@ -80,7 +80,7 @@ final class UserController extends AdminController
         if (!$record)
             return $this->missing('User', 'users');
         (new User())->delete((int) $id);
-        ActivityLogger::log(Auth::user()['name'] . ' deleted user ' . $record['email'] . ' from ' . Request::capture()->ip());
+        ActivityLogger::log(Auth::user()['name'] . ' deleted user ' . $record['username'] . ' from ' . Request::capture()->ip());
         flash('success', 'User deleted.');
         return Response::redirect(url('users'));
     }
@@ -88,14 +88,14 @@ final class UserController extends AdminController
     private function validate(Request $r, bool $passwordRequired): ?array
     {
         $name = trim((string) $r->input('name'));
-        $email = trim((string) $r->input('email'));
+        $username = strtolower(trim((string) $r->input('username')));
         $password = (string) $r->input('password');
         $role = (int) $r->input('role_id');
-        if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || ($passwordRequired && strlen($password) < 8) || ($password !== '' && strlen($password) < 8) || $role < 1) {
-            flash('error', 'Enter valid details; passwords must be at least 8 characters.');
+        if (strlen($name) < 2 || !preg_match('/^[a-z0-9._-]{3,50}$/', $username) || ($passwordRequired && strlen($password) < 8) || ($password !== '' && strlen($password) < 8) || $role < 1) {
+            flash('error', 'Enter a valid username and details; passwords must be at least 8 characters.');
             return null;
         }
-        return [$name, $email, $password, $role];
+        return [$name, $username, $password, $role];
     }
 
 }
