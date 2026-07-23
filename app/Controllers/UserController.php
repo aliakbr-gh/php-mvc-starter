@@ -19,12 +19,12 @@ final class UserController extends AdminController
         $request = Request::capture();
         [$search, $page, $perPage] = $this->filters($request);
         $result = (new User())->paginate($search, $page, $perPage);
-        return $this->view('admin/users/index', compact('search', 'page', 'perPage', 'result') + ['title' => 'Users', 'user' => Auth::user()], 'layouts/dashboard');
+        return $this->view('admin/users/index', compact('search', 'page', 'perPage', 'result') + ['title' => 'Users', 'user' => Auth::user()]);
     }
 
     public function create(): Response
     {
-        return $this->view('admin/users/create', ['title' => 'Create user', 'user' => Auth::user(), 'roles' => (new Role())->all()], 'layouts/dashboard');
+        return $this->view('admin/users/create', ['title' => 'Create user', 'user' => Auth::user(), 'roles' => (new Role())->all()]);
     }
 
     public function store(): Response
@@ -48,7 +48,7 @@ final class UserController extends AdminController
         $record = (new User())->findById((int) $id);
         if (!$record)
             return $this->missing('User', 'admin/users');
-        return $this->view('admin/users/edit', ['title' => 'Edit user', 'user' => Auth::user(), 'record' => $record, 'roles' => (new Role())->all()], 'layouts/dashboard');
+        return $this->view('admin/users/edit', ['title' => 'Edit user', 'user' => Auth::user(), 'record' => $record, 'roles' => (new Role())->all()]);
     }
 
     public function update(string $id): Response

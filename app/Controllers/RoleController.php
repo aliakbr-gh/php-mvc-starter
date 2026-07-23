@@ -27,12 +27,12 @@ final class RoleController extends AdminController
             'page' => $page,
             'perPage' => $perPage,
             'result' => $result,
-        ], 'layouts/dashboard');
+        ]);
     }
 
     public function create(): Response
     {
-        return $this->view('admin/roles/create', $this->formData('Create role'), 'layouts/dashboard');
+        return $this->view('admin/roles/create', $this->formData('Create role'));
     }
 
     public function store(): Response
@@ -55,7 +55,7 @@ final class RoleController extends AdminController
     {
         $role = (new Role())->find((int) $id);
         return $role
-            ? $this->view('admin/roles/edit', $this->formData('Edit role', $role), 'layouts/dashboard')
+            ? $this->view('admin/roles/edit', $this->formData('Edit role', $role))
             : $this->missing('Role', 'admin/roles');
     }
 

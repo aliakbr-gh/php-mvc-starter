@@ -6,7 +6,7 @@ namespace App\Core;
 
 abstract class Controller
 {
-    protected function view(string $view, array $data = [], ?string $layout = 'layouts/main'): Response
+    protected function view(string $view, array $data = [], ?string $layout = 'layouts/dashboard'): Response
     {
         return Response::html(View::render($view, $data, $layout));
     }

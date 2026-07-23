@@ -27,13 +27,13 @@ final class DashboardController extends Controller
             'title' => 'Dashboard',
             'user' => $user,
             'activities' => $activities,
-        ], 'layouts/dashboard');
+        ]);
     }
 
     public function admin(): Response
     {
         $user = Auth::user();
         ActivityLogger::log($user['name'] . ' viewed the admin area from ' . Request::capture()->ip(), (int) $user['id']);
-        return $this->view('dashboard/admin', ['title' => 'Admin', 'user' => $user], 'layouts/dashboard');
+        return $this->view('dashboard/admin', ['title' => 'Admin', 'user' => $user]);
     }
 }

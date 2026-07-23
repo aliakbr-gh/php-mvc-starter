@@ -26,12 +26,12 @@ final class PermissionController extends AdminController
             'page' => $page,
             'perPage' => $perPage,
             'result' => $result,
-        ], 'layouts/dashboard');
+        ]);
     }
 
     public function create(): Response
     {
-        return $this->view('admin/permissions/create', ['title' => 'Create permission', 'user' => Auth::user()], 'layouts/dashboard');
+        return $this->view('admin/permissions/create', ['title' => 'Create permission', 'user' => Auth::user()]);
     }
 
     public function store(): Response
@@ -60,7 +60,7 @@ final class PermissionController extends AdminController
         $record = (new Permission())->find((int) $id);
 
         return $record
-            ? $this->view('admin/permissions/edit', ['title' => 'Edit permission', 'user' => Auth::user(), 'record' => $record], 'layouts/dashboard')
+            ? $this->view('admin/permissions/edit', ['title' => 'Edit permission', 'user' => Auth::user(), 'record' => $record])
             : $this->missing('Permission', 'admin/permissions');
     }
 

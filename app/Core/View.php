@@ -15,7 +15,7 @@ final class View
         self::$basePath = rtrim($path, '/');
     }
 
-    public static function render(string $view, array $data = [], ?string $layout = 'layouts/main'): string
+    public static function render(string $view, array $data = [], ?string $layout = 'layouts/dashboard'): string
     {
         $content = self::capture($view, $data);
         return $layout === null ? $content : self::capture($layout, array_merge($data, ['content' => $content]));

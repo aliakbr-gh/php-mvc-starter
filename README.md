@@ -20,7 +20,7 @@ workflow, read `Project.md`.
 - `.php`-free URLs
 - Front controller and custom autoloader
 - GET and POST routing with dynamic parameters
-- Reusable layouts and views
+- One application layout with a permission-aware sidebar
 - PDO database connection with native prepared statements
 - Registration, login, logout, and sessions
 - Secure password hashing and verification
@@ -368,27 +368,23 @@ This loads:
 app/Views/reports/index.php
 ```
 
-The default public layout is:
-
-```text
-app/Views/layouts/main.php
-```
-
-The authenticated dashboard layout is:
+The whole application uses one layout:
 
 ```text
 app/Views/layouts/dashboard.php
 ```
 
-Use the dashboard layout explicitly:
+Controllers use it automatically:
 
 ```php
-return $this->view(
-    'reports/index',
-    ['title' => 'Reports', 'user' => Auth::user()],
-    'layouts/dashboard'
-);
+return $this->view('reports/index', [
+    'title' => 'Reports',
+    'user' => Auth::user(),
+]);
 ```
+
+Authenticated users see the permission-aware sidebar. Guest pages such as login
+and registration use the same layout without the sidebar.
 
 Escape output that may contain user-controlled data:
 
