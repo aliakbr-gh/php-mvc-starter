@@ -8,5 +8,6 @@
         <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
         <button class="button" type="submit">Log in</button>
     </form>
-    <p class="form-foot">No account? <a href="<?= htmlspecialchars(url('register'), ENT_QUOTES, 'UTF-8') ?>">Register</a></p>
+    <p class="form-foot">No account? <a
+                href="<?= htmlspecialchars(url('register'), ENT_QUOTES, 'UTF-8') ?>">Register</a></p>
 </section>

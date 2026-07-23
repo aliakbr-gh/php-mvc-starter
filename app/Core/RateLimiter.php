@@ -6,7 +6,9 @@ namespace App\Core;
 
 final class RateLimiter
 {
-    public function __construct(private readonly array $config) {}
+    public function __construct(private readonly array $config)
+    {
+    }
 
     /** @return array{allowed: bool, retry_after: int} */
     public function attempt(string $key): array

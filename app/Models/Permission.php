@@ -49,7 +49,7 @@ final class Permission extends Model
         $query->bindValue(':offset', ($page - 1) * $perPage, PDO::PARAM_INT);
         $query->execute();
 
-        return ['items' => $query->fetchAll(), 'total' => (int) $count->fetchColumn()];
+        return ['items' => $query->fetchAll(), 'total' => (int)$count->fetchColumn()];
     }
 
     public function create(string $name, string $slug): int
@@ -58,7 +58,7 @@ final class Permission extends Model
             ->prepare('INSERT INTO permissions (name, slug) VALUES (:name, :slug)')
             ->execute(compact('name', 'slug'));
 
-        return (int) $this->db()->lastInsertId();
+        return (int)$this->db()->lastInsertId();
     }
 
     public function update(int $id, string $name, string $slug): void

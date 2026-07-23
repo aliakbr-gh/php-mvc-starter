@@ -7,5 +7,6 @@
             <article><?= htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') ?></article>
         <?php endforeach; ?>
     </div>
-    <a class="button" href="<?= htmlspecialchars(url('hello/developer'), ENT_QUOTES, 'UTF-8') ?>">Try a dynamic route</a>
+    <a class="button" href="<?= htmlspecialchars(url('hello/developer'), ENT_QUOTES, 'UTF-8') ?>">Try a dynamic
+        route</a>
 </section>

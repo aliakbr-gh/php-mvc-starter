@@ -11,13 +11,20 @@ final class Auth
     private static ?array $user = null;
     private static ?array $permissions = null;
 
-    public static function check(): bool { return isset($_SESSION['user_id']); }
-    public static function guest(): bool { return !self::check(); }
+    public static function check(): bool
+    {
+        return isset($_SESSION['user_id']);
+    }
+
+    public static function guest(): bool
+    {
+        return !self::check();
+    }
 
     public static function user(): ?array
     {
         if (!self::check()) return null;
-        return self::$user ??= (new User())->findById((int) $_SESSION['user_id']);
+        return self::$user ??= (new User())->findById((int)$_SESSION['user_id']);
     }
 
     public static function attempt(string $email, string $password): bool
@@ -25,7 +32,7 @@ final class Auth
         $user = (new User())->findByEmail($email);
         if (!$user || !password_verify($password, $user['password'])) return false;
         session_regenerate_id(true);
-        $_SESSION['user_id'] = (int) $user['id'];
+        $_SESSION['user_id'] = (int)$user['id'];
         self::$user = $user;
         self::$permissions = null;
         return true;
@@ -57,7 +64,7 @@ final class Auth
     {
         $user = self::user();
         if ($user === null) return false;
-        self::$permissions ??= (new User())->permissions((int) $user['id']);
+        self::$permissions ??= (new User())->permissions((int)$user['id']);
         return in_array($permission, self::$permissions, true);
     }
 }

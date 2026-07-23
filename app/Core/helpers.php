@@ -14,7 +14,7 @@ if (!function_exists('config')) {
 if (!function_exists('app_name')) {
     function app_name(): string
     {
-        return (string) config('name', 'Core MVC');
+        return (string)config('name', 'Core MVC');
     }
 }
 

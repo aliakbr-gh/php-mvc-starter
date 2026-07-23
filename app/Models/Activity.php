@@ -17,7 +17,7 @@ final class Activity extends Model
         $statement->bindValue(':user_id', $userId, $userId === null ? \PDO::PARAM_NULL : \PDO::PARAM_INT);
         $statement->execute();
 
-        return (int) $this->db()->lastInsertId();
+        return (int)$this->db()->lastInsertId();
     }
 
     public function recent(?int $userId = null, int $limit = 10): array

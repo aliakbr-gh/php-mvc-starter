@@ -15,7 +15,9 @@ use PDOException;
 
 final class AuthController extends Controller
 {
-    public function loginForm(): Response { return $this->view('auth/login', ['title' => 'Login']); }
+    public function loginForm(): Response {
+        return $this->view('auth/login', ['title' => 'Login']);
+    }
     public function registerForm(): Response { return $this->view('auth/register', ['title' => 'Register']); }
 
     public function login(): Response

@@ -9,9 +9,11 @@ final class Request
     public function __construct(
         private readonly string $method,
         private readonly string $path,
-        private readonly array $query,
-        private readonly array $body,
-    ) {}
+        private readonly array  $query,
+        private readonly array  $body,
+    )
+    {
+    }
 
     public static function capture(): self
     {
@@ -32,10 +34,33 @@ final class Request
         );
     }
 
-    public function method(): string { return $this->method; }
-    public function path(): string { return $this->path; }
-    public function query(string $key, mixed $default = null): mixed { return $this->query[$key] ?? $default; }
-    public function input(string $key, mixed $default = null): mixed { return $this->body[$key] ?? $default; }
-    public function all(): array { return array_merge($this->query, $this->body); }
-    public function ip(): string { return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'; }
+    public function method(): string
+    {
+        return $this->method;
+    }
+
+    public function path(): string
+    {
+        return $this->path;
+    }
+
+    public function query(string $key, mixed $default = null): mixed
+    {
+        return $this->query[$key] ?? $default;
+    }
+
+    public function input(string $key, mixed $default = null): mixed
+    {
+        return $this->body[$key] ?? $default;
+    }
+
+    public function all(): array
+    {
+        return array_merge($this->query, $this->body);
+    }
+
+    public function ip(): string
+    {
+        return $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+    }
 }

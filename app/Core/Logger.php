@@ -8,10 +8,25 @@ final class Logger
 {
     private static array $config = ['enabled' => false];
 
-    public static function configure(array $config): void { self::$config = $config; }
-    public static function info(string $message, array $context = []): void { self::write('INFO', $message, $context); }
-    public static function warning(string $message, array $context = []): void { self::write('WARNING', $message, $context); }
-    public static function error(string $message, array $context = []): void { self::write('ERROR', $message, $context); }
+    public static function configure(array $config): void
+    {
+        self::$config = $config;
+    }
+
+    public static function info(string $message, array $context = []): void
+    {
+        self::write('INFO', $message, $context);
+    }
+
+    public static function warning(string $message, array $context = []): void
+    {
+        self::write('WARNING', $message, $context);
+    }
+
+    public static function error(string $message, array $context = []): void
+    {
+        self::write('ERROR', $message, $context);
+    }
 
     private static function write(string $level, string $message, array $context): void
     {
