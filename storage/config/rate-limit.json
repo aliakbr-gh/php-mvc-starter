@@ -1,0 +1,6 @@
+{
+    "enabled": true,
+    "requests_per_second": 10,
+    "pause_seconds": 120,
+    "max_violations": 3
+}

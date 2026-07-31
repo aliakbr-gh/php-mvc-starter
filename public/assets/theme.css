@@ -1,0 +1,58 @@
+/*
+ * Theme configuration
+ * Change these tokens to rebrand the whole interface.
+ */
+:root {
+    color-scheme: light;
+
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-primary-soft: #eff6ff;
+    --color-danger: #dc2626;
+    --color-danger-hover: #b91c1c;
+    --color-success: #059669;
+
+    --color-background: #f5f7fb;
+    --color-surface: #ffffff;
+    --color-input: #ffffff;
+    --color-surface-muted: #f3f4f6;
+    --color-surface-soft: #f9fafb;
+    --color-text: #111827;
+    --color-body: #4b5563;
+    --color-text-muted: #6b7280;
+    --color-border: #d1d5db;
+
+    --font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --radius-sm: 7px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
+    --shadow-md: 0 12px 28px rgb(15 23 42 / 12%);
+
+    --sidebar-width: 288px;
+    --content-width: 1600px;
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-primary-soft: #172554;
+    --color-danger: #f87171;
+    --color-danger-hover: #fca5a5;
+    --color-success: #34d399;
+
+    --color-background: #0b1120;
+    --color-surface: #111827;
+    --color-input: #182235;
+    --color-surface-muted: #1f2937;
+    --color-surface-soft: #182235;
+    --color-text: #f9fafb;
+    --color-body: #d1d5db;
+    --color-text-muted: #9ca3af;
+    --color-border: #374151;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 20%);
+    --shadow-md: 0 16px 34px rgb(0 0 0 / 28%);
+}

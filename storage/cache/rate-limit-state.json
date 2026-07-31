@@ -1,0 +1,22 @@
+{
+    "ips": {
+        "::1": {
+            "window_started_at": 1785497130.159614,
+            "request_count": 2,
+            "violations": 0,
+            "last_violation_window": 0,
+            "paused_until": 0,
+            "blocked": false,
+            "last_request_at": 1785497130
+        },
+        "127.0.0.1": {
+            "window_started_at": 1785497168.828477,
+            "request_count": 2,
+            "violations": 0,
+            "last_violation_window": 0,
+            "paused_until": 0,
+            "blocked": false,
+            "last_request_at": 1785497168
+        }
+    }
+}
