@@ -22,7 +22,9 @@ $activityLogsActive = str_contains($currentPath, '/activity-logs');
     <div class="topbar-inner">
         <div class="topbar-brand">
             <button class="icon-button" type="button" data-menu-toggle aria-label="Open main menu">
-                <span aria-hidden="true">☰</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+                    <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
             </button>
             <a class="header-brand" href="<?= url('dashboard') ?>">
                 <span class="brand-mark">
@@ -46,7 +48,9 @@ $activityLogsActive = str_contains($currentPath, '/activity-logs');
                     <strong><?= e(user()['name']) ?></strong>
                     <small>@<?= e(user()['username']) ?></small>
                 </span>
-                <span class="chevron">⌄</span>
+                <svg class="chevron" viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true">
+                    <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </button>
             <div class="user-dropdown" data-user-menu>
                 <div class="user-dropdown-heading">
