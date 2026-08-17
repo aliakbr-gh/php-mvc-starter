@@ -41,6 +41,12 @@ if (PHP_SAPI !== 'cli') {
 $GLOBALS['app_settings'] = (new \Core\AppSettings())->get();
 $GLOBALS['config']['name'] = $GLOBALS['app_settings']['app_name'];
 
-if (PHP_SAPI !== 'cli') {
+$bootstrapRequestPath = (string) (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
+$bootstrapBasePath = (string) (parse_url((string) ($GLOBALS['config']['base_url'] ?? ''), PHP_URL_PATH) ?: '');
+if ($bootstrapBasePath !== '' && str_starts_with($bootstrapRequestPath, $bootstrapBasePath)) {
+    $bootstrapRequestPath = substr($bootstrapRequestPath, strlen($bootstrapBasePath)) ?: '/';
+}
+
+if (PHP_SAPI !== 'cli' && !str_starts_with($bootstrapRequestPath, '/api/')) {
     enforce_session_security();
 }

@@ -1,6 +1,10 @@
 Options -Indexes
 RewriteEngine On
 
+# Preserve bearer tokens when Apache/FastCGI does not forward Authorization.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 RewriteRule ^assets/(.*)$ public/assets/$1 [L]
 RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -42,6 +42,7 @@ A framework-free PHP 8 MVC administration starter with authentication, role-base
 - `environment`: read from `APP_ENV`, defaulting to `development`.
 - `debug`: read from `APP_DEBUG`; development defaults to enabled.
 - `timezone`: read from `APP_TIMEZONE`, defaulting to `Asia/Karachi`.
+- `api`: JWT issuer, audience, signing secret, and access-token lifetime.
 - `request_logging`: enables the JSON-lines request logger.
 - `bcrypt_cost`: password hashing cost.
 
@@ -57,14 +58,25 @@ DB_PASSWORD
 
 Local defaults target MAMP on macOS (`127.0.0.1:3305`, database `lab360_db`, username/password `root`). Do not commit production credentials.
 
+API environment variables:
+
+```text
+APP_JWT_SECRET       Required random secret of at least 32 characters
+APP_API_ISSUER       Token issuer; defaults to the application slug
+APP_API_AUDIENCE     Token audience; defaults to <application-slug>-api
+APP_API_TOKEN_LIFETIME Access-token lifetime in seconds; defaults to 900
+```
+
+Generate a production signing secret with `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"` and keep it outside source control. Applications consuming the API receive only their client credentials; they never receive the signing secret.
+
 ## Request lifecycle
 
 1. Apache routes requests through the root or public `.htaccess` file to `public/index.php`.
 2. `bootstrap.php` loads configuration, helpers, PSR-4-style autoloading, secure session settings, exception handling, and file-backed application settings.
 3. For an authenticated browser session, bootstrap verifies idle expiry, active account status, and the database-backed session version.
 4. `RequestLogger` registers a shutdown logger and `RateLimiter` checks the client IP.
-5. `routes/web.php` registers routes and their middleware.
-6. `Core\Router` normalizes the path, verifies CSRF on every POST request, runs middleware, and invokes the controller.
+5. `routes/web.php` and `routes/api.php` register browser and versioned API routes.
+6. `Core\Router` normalizes the path, verifies CSRF on browser POST requests, runs middleware, and invokes the controller. Stateless API routes authenticate with bearer tokens instead of browser CSRF tokens.
 7. Controllers validate input, call models/services, set flash messages, and render a view through the shared layout.
 8. The layout supplies navigation, the reusable page loader, toast messages, responsive styling, and theme behavior.
 
@@ -101,6 +113,7 @@ public/
   uploads/             Uploaded branding files
 routes/
   web.php              Complete route and middleware map
+  api.php              Versioned JSON API routes
 storage/
   config/              Application settings and rate-limit settings
   cache/               Mutable rate-limit state
@@ -156,6 +169,55 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Database Backup:** database SQL, uploads ZIP, or full ZIP downloads.
 - **Health:** public server/database health response.
 - **Profile:** current-account details and password change.
+- **API:** versioned JSON requests/responses, machine clients, and native HS256 JWT authentication.
+
+## Versioned JSON API
+
+API routes live under `/api/v1/`; future versions can use separate controllers and `/api/v2/` routes without changing v1 consumers. Every response contains only `success`, `message`, and `data`. HTTP status codes are sent through the HTTP response and are not duplicated in JSON. Failed responses always return `null` for `data`.
+
+For an existing database, add the API table without resetting any data:
+
+```bash
+php database/migrate-api.php
+```
+
+Create a machine client and save the displayed secret immediately. Generated client secrets have high entropy and are stored as SHA-256 hashes; the plaintext secret cannot be retrieved:
+
+```bash
+php database/create-api-client.php "PMC Website"
+```
+
+Databases created by an earlier API-layer revision may retain an unused `scopes` column. Client creation remains compatible with that column, so no destructive schema change is required.
+
+Clients created by an earlier revision with bcrypt secret hashes are upgraded transparently to SHA-256 after their next successful authentication. That first request retains the old bcrypt verification cost; later token requests use the faster hash comparison.
+
+Request an access token:
+
+```bash
+curl -X POST http://localhost/php-mvc-starter/api/v1/auth/token \
+  -H 'Content-Type: application/json' \
+  -d '{"client_id":"CLIENT_ID","client_secret":"CLIENT_SECRET"}'
+```
+
+Call a protected endpoint:
+
+```bash
+curl http://localhost/php-mvc-starter/api/v1/example \
+  -H 'Authorization: Bearer ACCESS_TOKEN' \
+  -H 'Accept: application/json'
+```
+
+Define endpoints in `routes/api.php` with both API middleware entries:
+
+```php
+$router->get(
+    '/api/v1/doctors/{id}',
+    [DoctorController::class, 'show'],
+    ['api-auth']
+);
+```
+
+API controllers use `Core\API\Request` for JSON, query strings, headers, bearer tokens, client IPs, and route parameters. They use `Core\API\Response` for consistent success, created, validation, authentication, authorization, not-found, and error responses. API POST routes do not use browser sessions or CSRF; HTTPS is mandatory in production.
 
 ## Database and seeds
 
@@ -166,6 +228,7 @@ The relational schema contains:
 - `role_permissions`
 - `users`, including active status and a password-session version
 - `activity_logs`
+- `api_clients`, including hashed client secrets, active state, and token version
 
 Use `database/schema.sql` only when you want empty tables. Use one complete seed method—not both—for a fresh test environment:
 
@@ -196,6 +259,7 @@ Backup filenames use a safe lowercase slug generated from the current dynamic ap
 ## Security notes
 
 - Keep `APP_DEBUG=0` in production.
+- Set a unique `APP_JWT_SECRET` of at least 32 random characters and rotate client credentials if exposed.
 - Change seeded passwords before exposing the application.
 - Use HTTPS so the session cookie receives the Secure flag.
 - Set `APP_SESSION_LIFETIME` to the required idle timeout in seconds; 1800 is the default.

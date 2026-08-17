@@ -48,6 +48,10 @@ final class ExceptionHandler
             $message = 'Something went wrong while processing your request. Please try again.';
         }
 
+        if (API\APIContext::isApiRequest()) {
+            API\Response::error($message, 500);
+        }
+
         abort(500, $message);
     }
 

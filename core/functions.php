@@ -59,6 +59,10 @@ function redirect(string $path = ''): never
 
 function abort(int $status, string $message): never
 {
+    if (\Core\API\APIContext::isApiRequest()) {
+        \Core\API\Response::error($message, $status);
+    }
+
     http_response_code($status);
     $errorView = dirname(__DIR__) . '/app/Views/errors/' . $status . '.php';
 

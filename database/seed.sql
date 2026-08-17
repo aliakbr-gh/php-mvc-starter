@@ -6,6 +6,7 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS activity_logs;
+DROP TABLE IF EXISTS api_clients;
 DROP TABLE IF EXISTS rate_limit_entries;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS role_permissions;
@@ -67,6 +68,18 @@ CREATE TABLE activity_logs (
     INDEX idx_activity_logs_user_id (user_id),
     CONSTRAINT fk_activity_logs_user
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE api_clients (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    client_id VARCHAR(100) NOT NULL UNIQUE,
+    client_secret_hash VARCHAR(255) NOT NULL,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    token_version BIGINT UNSIGNED NOT NULL DEFAULT 1,
+    last_authenticated_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE rate_limit_entries (

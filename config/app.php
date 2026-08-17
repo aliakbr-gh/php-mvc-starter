@@ -28,4 +28,10 @@ return [
         FILTER_VALIDATE_BOOL
     ),
     'timezone' => getenv('APP_TIMEZONE') ?: 'Asia/Karachi',
+    'api' => [
+        'issuer' => getenv('APP_API_ISSUER') ?: $appSlug,
+        'audience' => getenv('APP_API_AUDIENCE') ?: $appSlug . '-api',
+        'jwt_secret' => getenv('APP_JWT_SECRET') ?: 'f7a92c50e6d84bdfa2439185c874a9588e731bf59182572173f897e935baba12',
+        'token_lifetime' => max(60, (int) (getenv('APP_API_TOKEN_LIFETIME') ?: 900)),
+    ],
 ];
