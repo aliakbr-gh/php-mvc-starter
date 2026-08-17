@@ -103,7 +103,7 @@ core/
   JsonStore.php       Locked JSON persistence helper
   Paginator.php       Shared search/page request and response shape
   HttpClient.php      Reusable cURL client for external HTTP APIs
-  HttpResponse.php    External response status, headers, body, and JSON access
+  HttpClientResponse.php External response status, headers, body, and JSON access
   ExceptionHandler.php Production-safe error handling and logging
 database/
   schema.sql          Tables only; no roles, permissions, or users

@@ -6,7 +6,7 @@ namespace Core;
 
 use JsonException;
 
-final class HttpResponse
+final class HttpClientResponse
 {
     public function __construct(
         private readonly int $statusCode,

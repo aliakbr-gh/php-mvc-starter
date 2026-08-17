@@ -18,7 +18,7 @@ final class HttpClient
         }
     }
 
-    public function get(string $url, array $query = [], array $headers = []): HttpResponse
+    public function get(string $url, array $query = [], array $headers = []): HttpClientResponse
     {
         return $this->request('GET', $url, [
             'query' => $query,
@@ -31,7 +31,7 @@ final class HttpClient
         array $data = [],
         array $query = [],
         array $headers = []
-    ): HttpResponse {
+    ): HttpClientResponse {
         return $this->sendJson('POST', $url, $data, $query, $headers);
     }
 
@@ -40,7 +40,7 @@ final class HttpClient
         array $data = [],
         array $query = [],
         array $headers = []
-    ): HttpResponse {
+    ): HttpClientResponse {
         return $this->sendJson('PUT', $url, $data, $query, $headers);
     }
 
@@ -49,7 +49,7 @@ final class HttpClient
         array $data = [],
         array $query = [],
         array $headers = []
-    ): HttpResponse {
+    ): HttpClientResponse {
         return $this->sendJson('PATCH', $url, $data, $query, $headers);
     }
 
@@ -58,7 +58,7 @@ final class HttpClient
         array $data = [],
         array $query = [],
         array $headers = []
-    ): HttpResponse {
+    ): HttpClientResponse {
         return $this->sendJson('DELETE', $url, $data, $query, $headers);
     }
 
@@ -68,7 +68,7 @@ final class HttpClient
         array $data,
         array $query,
         array $headers
-    ): HttpResponse {
+    ): HttpClientResponse {
         return $this->request($method, $url, [
             'query' => $query,
             'headers' => $headers,
@@ -76,7 +76,7 @@ final class HttpClient
         ]);
     }
 
-    public function request(string $method, string $url, array $options = []): HttpResponse
+    public function request(string $method, string $url, array $options = []): HttpClientResponse
     {
         if (array_key_exists('json', $options) && array_key_exists('body', $options)) {
             throw new HttpClientException('Choose either a JSON body or a raw body, not both.');
@@ -175,6 +175,6 @@ final class HttpClient
         $statusCode = (int) curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
         curl_close($handle);
 
-        return new HttpResponse($statusCode, $responseHeaders, $body);
+        return new HttpClientResponse($statusCode, $responseHeaders, $body);
     }
 }
