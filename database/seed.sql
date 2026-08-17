@@ -6,6 +6,7 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS activity_logs;
+DROP TABLE IF EXISTS rate_limit_entries;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS role_permissions;
 DROP TABLE IF EXISTS permissions;
@@ -66,6 +67,20 @@ CREATE TABLE activity_logs (
     INDEX idx_activity_logs_user_id (user_id),
     CONSTRAINT fk_activity_logs_user
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE rate_limit_entries (
+    ip_address VARCHAR(45) NOT NULL PRIMARY KEY,
+    window_started_at DECIMAL(16,6) NOT NULL,
+    request_count INT UNSIGNED NOT NULL DEFAULT 0,
+    violations INT UNSIGNED NOT NULL DEFAULT 0,
+    last_violation_window BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    paused_until BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    blocked TINYINT(1) NOT NULL DEFAULT 0,
+    last_request_at BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_rate_limit_entries_cleanup (blocked, last_request_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO roles (id, name, slug) VALUES

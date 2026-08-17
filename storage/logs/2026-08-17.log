@@ -1,0 +1,7 @@
+{"timestamp":"2026-08-17T13:03:25+05:00","method":"GET","uri":"/php-mvc-starter/","status":302,"ip":"::1","user_id":null,"duration_ms":18.67}
+{"timestamp":"2026-08-17T13:03:25+05:00","method":"GET","uri":"/php-mvc-starter/login","status":200,"ip":"::1","user_id":null,"duration_ms":8.95}
+{"timestamp":"2026-08-17T13:03:29+05:00","method":"POST","uri":"/php-mvc-starter/login","status":302,"ip":"::1","user_id":2,"duration_ms":33.59}
+{"timestamp":"2026-08-17T13:03:29+05:00","method":"GET","uri":"/php-mvc-starter/dashboard","status":200,"ip":"::1","user_id":2,"duration_ms":13.37}
+{"timestamp":"2026-08-17T13:03:33+05:00","method":"GET","uri":"/php-mvc-starter/rate-limits","status":200,"ip":"::1","user_id":2,"duration_ms":25.3}
+{"timestamp":"2026-08-17T13:04:39+05:00","method":"GET","uri":"/php-mvc-starter/dashboard","status":200,"ip":"::1","user_id":2,"duration_ms":30.52}
+{"timestamp":"2026-08-17T13:04:46+05:00","method":"GET","uri":"/php-mvc-starter/dashboard","status":200,"ip":"::1","user_id":2,"duration_ms":32.22}

@@ -105,7 +105,7 @@ Do not renumber existing SQL seed permission IDs unnecessarily. Append new IDs t
 - Relational data: roles, permissions, role assignments, users, activity logs.
 - Application branding: `storage/config/app-settings.json`.
 - Rate-limit configuration: `storage/config/rate-limit.json`.
-- Rate-limit state: `storage/cache/rate-limit-state.json`.
+- Rate-limit state: `rate_limit_entries`, with one transactionally updated row per IP.
 - Requests: `storage/logs/YYYY-MM-DD.log` as JSON lines.
 - Exceptions: `storage/logs/errors-YYYY-MM-DD.log` as JSON lines.
 

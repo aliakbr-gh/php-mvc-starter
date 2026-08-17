@@ -152,7 +152,7 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Application Settings:** branding name, logo, and favicon stored in JSON/uploads.
 - **Request Logs:** daily JSON-lines request inspection with pagination.
 - **Activity Logs:** database-backed audit trail of authenticated actions.
-- **Rate Limits:** configuration plus searchable, paginated tracked-IP state.
+- **Rate Limits:** JSON-backed configuration plus database-backed, searchable tracked-IP state.
 - **Database Backup:** database SQL, uploads ZIP, or full ZIP downloads.
 - **Health:** public server/database health response.
 - **Profile:** current-account details and password change.

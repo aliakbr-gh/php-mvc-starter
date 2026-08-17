@@ -124,6 +124,21 @@ try {
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
         ) '
     );
+    $db->query(
+        'CREATE TABLE rate_limit_entries (
+            ip_address VARCHAR(45) NOT NULL PRIMARY KEY,
+            window_started_at DECIMAL(16,6) NOT NULL,
+            request_count INT UNSIGNED NOT NULL DEFAULT 0,
+            violations INT UNSIGNED NOT NULL DEFAULT 0,
+            last_violation_window BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            paused_until BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            blocked TINYINT(1) NOT NULL DEFAULT 0,
+            last_request_at BIGINT UNSIGNED NOT NULL DEFAULT 0,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_rate_limit_entries_cleanup (blocked, last_request_at)
+        ) '
+    );
 
     $db->begin_transaction();
 
