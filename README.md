@@ -7,7 +7,7 @@ A framework-free PHP 8 MVC administration starter with authentication, role-base
 - PHP 8.1 or newer
 - MySQL 8 or MariaDB with `mysqli`
 - Apache with `mod_rewrite`
-- PHP extensions: `mysqli`, `json`, and `zip`
+- PHP extensions: `curl`, `mysqli`, `json`, and `zip`
 - Write access to `storage/` and `public/uploads/`
 
 ## Quick start with MAMP
@@ -102,6 +102,8 @@ core/
   DatabaseBackup.php  SQL and ZIP backup generation
   JsonStore.php       Locked JSON persistence helper
   Paginator.php       Shared search/page request and response shape
+  HttpClient.php      Reusable cURL client for external HTTP APIs
+  HttpResponse.php    External response status, headers, body, and JSON access
   ExceptionHandler.php Production-safe error handling and logging
 database/
   schema.sql          Tables only; no roles, permissions, or users
@@ -170,6 +172,27 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Health:** public server/database health response.
 - **Profile:** current-account details and password change.
 - **API:** versioned JSON requests/responses, user-based native HS256 JWT authentication, and controller-owned JSON request-key verification.
+- **External API client:** reusable outbound HTTP requests, with an authenticated JSONPlaceholder demo at `/external-api/posts`.
+
+## External HTTP APIs
+
+Use `Core\HttpClient` from a controller or service when calling an external API. It provides `get()`, `post()`, `put()`, `patch()`, and `delete()` methods, plus `request()` for other HTTP methods. Every convenience method supports query parameters and headers; write methods send their data as JSON.
+
+```php
+$client = new Core\HttpClient(['Accept' => 'application/json']);
+$response = $client->get('https://example.com/products', ['page' => 1]);
+$created = $client->post(
+    'https://example.com/products',
+    ['name' => 'Cotton Fabric', 'price' => 1500],
+    ['store_id' => 5]
+);
+
+if ($response->successful()) {
+    $products = $response->json();
+}
+```
+
+Transport errors throw `Core\HttpClientException`; JSON decoding errors throw `JsonException`. Check `successful()` before consuming a response because HTTP error statuses are returned as normal responses.
 
 ## Versioned JSON API
 

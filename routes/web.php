@@ -12,8 +12,10 @@ use App\Controllers\DatabaseBackupController;
 use App\Controllers\ActivityLogController;
 use App\Controllers\ProfileController;
 use App\Controllers\HealthController;
+use App\Controllers\ExternalApiController;
 
 $router->get('/health', [HealthController::class, 'index']);
+$router->get('/external-api/posts', [ExternalApiController::class, 'posts']);
 $router->get('/', [DashboardController::class, 'index'], ['auth', 'permission:dashboard.view']);
 $router->get('/login', [AuthController::class, 'showLogin'], ['guest']);
 $router->post('/login', [AuthController::class, 'login'], ['guest']);

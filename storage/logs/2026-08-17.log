@@ -146,3 +146,13 @@
 {"timestamp":"2026-08-17T14:25:29+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":401,"ip":"::1","user_id":null,"duration_ms":13.28}
 {"timestamp":"2026-08-17T14:26:18+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":200,"ip":"::1","user_id":null,"duration_ms":15.72}
 {"timestamp":"2026-08-17T14:26:19+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":200,"ip":"::1","user_id":null,"duration_ms":12.48}
+{"timestamp":"2026-08-17T14:43:50+05:00","method":"GET","uri":"/php-mvc-starter/api/v1/example","status":401,"ip":"::1","user_id":null,"duration_ms":22.68}
+{"timestamp":"2026-08-17T16:29:13+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":302,"ip":"::1","user_id":null,"duration_ms":36.74}
+{"timestamp":"2026-08-17T16:29:13+05:00","method":"GET","uri":"/php-mvc-starter/login","status":200,"ip":"::1","user_id":null,"duration_ms":19.96}
+{"timestamp":"2026-08-17T16:29:18+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":302,"ip":"::1","user_id":null,"duration_ms":20.79}
+{"timestamp":"2026-08-17T16:29:18+05:00","method":"GET","uri":"/php-mvc-starter/login","status":200,"ip":"::1","user_id":null,"duration_ms":20.59}
+{"timestamp":"2026-08-17T16:29:27+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":200,"ip":"::1","user_id":null,"duration_ms":444.69}
+{"timestamp":"2026-08-17T16:29:35+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":200,"ip":"::1","user_id":null,"duration_ms":1283.08}
+{"timestamp":"2026-08-17T16:33:05+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":500,"ip":"::1","user_id":null,"duration_ms":381.58}
+{"timestamp":"2026-08-17T16:33:21+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":500,"ip":"::1","user_id":null,"duration_ms":227.71}
+{"timestamp":"2026-08-17T16:33:22+05:00","method":"GET","uri":"/php-mvc-starter/external-api/posts","status":500,"ip":"::1","user_id":null,"duration_ms":192.16}
