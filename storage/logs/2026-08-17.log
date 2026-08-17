@@ -136,3 +136,13 @@
 {"timestamp":"2026-08-17T14:12:22+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/auth/token","status":200,"ip":"::1","user_id":null,"duration_ms":20.39}
 {"timestamp":"2026-08-17T14:13:42+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/auth/token","status":200,"ip":"::1","user_id":null,"duration_ms":21.81}
 {"timestamp":"2026-08-17T14:13:42+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/auth/token","status":200,"ip":"::1","user_id":null,"duration_ms":18.3}
+{"timestamp":"2026-08-17T14:14:45+05:00","method":"GET","uri":"/php-mvc-starter/users","status":200,"ip":"::1","user_id":2,"duration_ms":45.97}
+{"timestamp":"2026-08-17T14:23:47+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/auth/login","status":422,"ip":"::1","user_id":null,"duration_ms":18.68}
+{"timestamp":"2026-08-17T14:24:09+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/auth/login","status":200,"ip":"::1","user_id":null,"duration_ms":37.41}
+{"timestamp":"2026-08-17T14:24:16+05:00","method":"GET","uri":"/php-mvc-starter/api/v1/example","status":200,"ip":"::1","user_id":null,"duration_ms":16.81}
+{"timestamp":"2026-08-17T14:24:18+05:00","method":"GET","uri":"/php-mvc-starter/api/v1/example","status":200,"ip":"::1","user_id":null,"duration_ms":18.3}
+{"timestamp":"2026-08-17T14:25:10+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":401,"ip":"::1","user_id":null,"duration_ms":17.97}
+{"timestamp":"2026-08-17T14:25:28+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":401,"ip":"::1","user_id":null,"duration_ms":11.58}
+{"timestamp":"2026-08-17T14:25:29+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":401,"ip":"::1","user_id":null,"duration_ms":13.28}
+{"timestamp":"2026-08-17T14:26:18+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":200,"ip":"::1","user_id":null,"duration_ms":15.72}
+{"timestamp":"2026-08-17T14:26:19+05:00","method":"POST","uri":"/php-mvc-starter/api/v1/open","status":200,"ip":"::1","user_id":null,"duration_ms":12.48}

@@ -169,35 +169,21 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Database Backup:** database SQL, uploads ZIP, or full ZIP downloads.
 - **Health:** public server/database health response.
 - **Profile:** current-account details and password change.
-- **API:** versioned JSON requests/responses, machine clients, and native HS256 JWT authentication.
+- **API:** versioned JSON requests/responses, user-based native HS256 JWT authentication, and controller-owned JSON request-key verification.
 
 ## Versioned JSON API
 
 API routes live under `/api/v1/`; future versions can use separate controllers and `/api/v2/` routes without changing v1 consumers. Every response contains only `success`, `message`, and `data`. HTTP status codes are sent through the HTTP response and are not duplicated in JSON. Failed responses always return `null` for `data`.
 
-For an existing database, add the API table without resetting any data:
+Create a dedicated active user such as `pmc-web` through User Management, then log in to request an access token:
 
 ```bash
-php database/migrate-api.php
-```
-
-Create a machine client and save the displayed secret immediately. Generated client secrets have high entropy and are stored as SHA-256 hashes; the plaintext secret cannot be retrieved:
-
-```bash
-php database/create-api-client.php "PMC Website"
-```
-
-Databases created by an earlier API-layer revision may retain an unused `scopes` column. Client creation remains compatible with that column, so no destructive schema change is required.
-
-Clients created by an earlier revision with bcrypt secret hashes are upgraded transparently to SHA-256 after their next successful authentication. That first request retains the old bcrypt verification cost; later token requests use the faster hash comparison.
-
-Request an access token:
-
-```bash
-curl -X POST http://localhost/php-mvc-starter/api/v1/auth/token \
+curl -X POST http://localhost/php-mvc-starter/api/v1/auth/login \
   -H 'Content-Type: application/json' \
-  -d '{"client_id":"CLIENT_ID","client_secret":"CLIENT_SECRET"}'
+  -d '{"username":"pmc-web","password":"USER_PASSWORD"}'
 ```
+
+The JWT represents that database user. Deactivating the user or changing its password invalidates issued tokens through the existing `is_active` and `session_version` fields.
 
 Call a protected endpoint:
 
@@ -207,7 +193,7 @@ curl http://localhost/php-mvc-starter/api/v1/example \
   -H 'Accept: application/json'
 ```
 
-Define endpoints in `routes/api.php` with both API middleware entries:
+Define protected endpoints in `routes/api.php` with JWT middleware:
 
 ```php
 $router->get(
@@ -219,6 +205,14 @@ $router->get(
 
 API controllers use `Core\API\Request` for JSON, query strings, headers, bearer tokens, client IPs, and route parameters. They use `Core\API\Response` for consistent success, created, validation, authentication, authorization, not-found, and error responses. API POST routes do not use browser sessions or CSRF; HTTPS is mandatory in production.
 
+For a simple POST integration where the controller owns the secret, read a `key` from the JSON body and verify it with `hash_equals()`. The example `/api/v1/open` endpoint demonstrates this pattern. Replace its controller constant before use:
+
+```bash
+curl -X POST http://localhost/php-mvc-starter/api/v1/open \
+  -H 'Content-Type: application/json' \
+  -d '{"key":"YOUR_PRIVATE_KEY","payload":{"example":true}}'
+```
+
 ## Database and seeds
 
 The relational schema contains:
@@ -228,7 +222,6 @@ The relational schema contains:
 - `role_permissions`
 - `users`, including active status and a password-session version
 - `activity_logs`
-- `api_clients`, including hashed client secrets, active state, and token version
 
 Use `database/schema.sql` only when you want empty tables. Use one complete seed method—not both—for a fresh test environment:
 

@@ -125,19 +125,6 @@ try {
         ) '
     );
     $db->query(
-        'CREATE TABLE api_clients (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(120) NOT NULL,
-            client_id VARCHAR(100) NOT NULL UNIQUE,
-            client_secret_hash VARCHAR(255) NOT NULL,
-            is_active TINYINT(1) NOT NULL DEFAULT 1,
-            token_version BIGINT UNSIGNED NOT NULL DEFAULT 1,
-            last_authenticated_at TIMESTAMP NULL DEFAULT NULL,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) '
-    );
-    $db->query(
         'CREATE TABLE rate_limit_entries (
             ip_address VARCHAR(45) NOT NULL PRIMARY KEY,
             window_started_at DECIMAL(16,6) NOT NULL,

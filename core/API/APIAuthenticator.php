@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Core\API;
 
-use App\Models\APIClient;
+use App\Models\User;
 use Throwable;
 
 final class APIAuthenticator
 {
-    private static ?array $client = null;
+    private static ?array $user = null;
 
     public static function authenticate(): void
     {
@@ -30,16 +30,25 @@ final class APIAuthenticator
             Response::unauthorized();
         }
 
-        $client = (new APIClient())->findActiveByClientId((string) $claims['sub']);
-        if ($client === null || (int) ($claims['ver'] ?? 0) !== $client['token_version']) {
+        if (($claims['type'] ?? null) !== 'user') {
             Response::unauthorized();
         }
 
-        self::$client = $client;
+        $userId = max(0, (int) $claims['sub']);
+        $account = $userId > 0 ? (new User())->find($userId) : null;
+        if (
+            $account === null
+            || !(bool) $account['is_active']
+            || (int) ($claims['ver'] ?? 0) !== (int) $account['session_version']
+        ) {
+            Response::unauthorized();
+        }
+
+        self::$user = $account;
     }
 
-    public static function client(): ?array
+    public static function user(): ?array
     {
-        return self::$client;
+        return self::$user;
     }
 }

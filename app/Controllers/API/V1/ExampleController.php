@@ -10,19 +10,31 @@ use Core\API\Response;
 
 final class ExampleController
 {
+    private const REQUEST_KEY = 'replace-with-your-private-request-key';
+
     public function index(): never
     {
         Response::success([
-            'client' => APIAuthenticator::client()['client_id'] ?? null,
+            'user' => APIAuthenticator::user()['username'] ?? null,
             'query' => Request::capture()->query(),
         ], 'Protected API endpoint reached successfully.');
     }
 
     public function open(): never
     {
+        $request = Request::capture();
+        if ($request->hasInvalidJson()) {
+            Response::error('The request body must contain valid JSON.', 400);
+        }
+
+        $providedKey = (string) $request->json('key', '');
+        if ($providedKey === '' || !hash_equals(self::REQUEST_KEY, $providedKey)) {
+            Response::unauthorized('Invalid request key.');
+        }
+
         Response::success([
-            'client' => APIAuthenticator::client()['client_id'] ?? null,
-        ], 'Public API endpoint reached successfully.');
+            'payload' => $request->json('payload', []),
+        ], 'JSON request key verified successfully.');
     }
 
     public function show(): never

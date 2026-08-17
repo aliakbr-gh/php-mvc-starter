@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\API\V1;
 
-use App\Models\APIClient;
+use App\Models\User;
 use Core\API\JWT;
 use Core\API\Request;
 use Core\API\Response;
@@ -12,31 +12,35 @@ use Throwable;
 
 final class AuthController
 {
-    public function token(): never
+    public function login(): never
     {
         $request = Request::capture();
         if ($request->hasInvalidJson()) {
             Response::error('The request body must contain valid JSON.', 400);
         }
 
-        $clientId = trim((string) $request->json('client_id', ''));
-        $clientSecret = (string) $request->json('client_secret', '');
+        $username = strtolower(trim((string) $request->json('username', '')));
+        $password = (string) $request->json('password', '');
         $errors = [];
-        if ($clientId === '') {
-            $errors['client_id'][] = 'The client_id field is required.';
+        if ($username === '') {
+            $errors['username'][] = 'The username field is required.';
         }
-        if ($clientSecret === '') {
-            $errors['client_secret'][] = 'The client_secret field is required.';
+        if ($password === '') {
+            $errors['password'][] = 'The password field is required.';
         }
         if ($errors !== []) {
             Response::validation($errors);
         }
 
-        $model = new APIClient();
-        $client = $model->findActiveByClientId($clientId);
-        if ($client === null || !$model->verifySecret($client, $clientSecret)) {
+        $model = new User();
+        $account = $model->findByUsername($username);
+        if ($account === null || !password_verify($password, (string) $account['password'])) {
             usleep(random_int(100000, 250000));
-            Response::unauthorized('Invalid client credentials.');
+            Response::unauthorized('The username or password is incorrect.');
+        }
+
+        if (!(bool) $account['is_active']) {
+            Response::unauthorized('This user account is inactive.');
         }
 
         $config = $GLOBALS['config']['api'];
@@ -44,13 +48,15 @@ final class AuthController
         $lifetime = (int) $config['token_lifetime'];
         $claims = [
             'iss' => (string) $config['issuer'],
-            'sub' => (string) $client['client_id'],
+            'sub' => (string) $account['id'],
             'aud' => (string) $config['audience'],
             'iat' => $now,
             'nbf' => $now,
             'exp' => $now + $lifetime,
             'jti' => bin2hex(random_bytes(16)),
-            'ver' => (int) $client['token_version'],
+            'type' => 'user',
+            'username' => (string) $account['username'],
+            'ver' => (int) $account['session_version'],
         ];
 
         try {
@@ -59,11 +65,10 @@ final class AuthController
             Response::error('API authentication is not configured correctly.', 500);
         }
 
-        $model->recordAuthentication((int) $client['id']);
         Response::success([
             'access_token' => $token,
             'token_type' => 'Bearer',
             'expires_in' => $lifetime,
-        ], 'Access token issued successfully.');
+        ], 'Login successful.');
     }
 }
