@@ -8,9 +8,6 @@ use JsonException;
 
 final class HttpResponse
 {
-    /**
-     * @param array<string, list<string>> $headers
-     */
     public function __construct(
         private readonly int $statusCode,
         private readonly array $headers,
@@ -23,7 +20,6 @@ final class HttpResponse
         return $this->statusCode;
     }
 
-    /** @return array<string, list<string>> */
     public function headers(): array
     {
         return $this->headers;
@@ -46,11 +42,6 @@ final class HttpResponse
         return $this->statusCode >= 200 && $this->statusCode < 300;
     }
 
-    /**
-     * @return array<mixed>
-     *
-     * @throws JsonException
-     */
     public function json(): array
     {
         $decoded = json_decode($this->body, true, 512, JSON_THROW_ON_ERROR);

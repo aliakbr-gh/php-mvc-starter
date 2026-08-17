@@ -8,7 +8,6 @@ use JsonException;
 
 final class HttpClient
 {
-    /** @param array<string, string> $defaultHeaders */
     public function __construct(
         private readonly array $defaultHeaders = [],
         private readonly int $timeoutSeconds = 10,
@@ -19,10 +18,6 @@ final class HttpClient
         }
     }
 
-    /**
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     public function get(string $url, array $query = [], array $headers = []): HttpResponse
     {
         return $this->request('GET', $url, [
@@ -31,11 +26,6 @@ final class HttpClient
         ]);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     public function post(
         string $url,
         array $data = [],
@@ -45,11 +35,6 @@ final class HttpClient
         return $this->sendJson('POST', $url, $data, $query, $headers);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     public function put(
         string $url,
         array $data = [],
@@ -59,11 +44,6 @@ final class HttpClient
         return $this->sendJson('PUT', $url, $data, $query, $headers);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     public function patch(
         string $url,
         array $data = [],
@@ -73,11 +53,6 @@ final class HttpClient
         return $this->sendJson('PATCH', $url, $data, $query, $headers);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     public function delete(
         string $url,
         array $data = [],
@@ -87,11 +62,6 @@ final class HttpClient
         return $this->sendJson('DELETE', $url, $data, $query, $headers);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, scalar|null> $query
-     * @param array<string, string> $headers
-     */
     private function sendJson(
         string $method,
         string $url,
@@ -106,17 +76,6 @@ final class HttpClient
         ]);
     }
 
-    /**
-     * Use `query` for URL parameters, `json` for a JSON body, or `body` for an
-     * already encoded raw body. `json` and `body` cannot be used together.
-     *
-     * @param array{
-     *     query?: array<string, scalar|null>,
-     *     headers?: array<string, string>,
-     *     json?: mixed,
-     *     body?: string
-     * } $options
-     */
     public function request(string $method, string $url, array $options = []): HttpResponse
     {
         if (array_key_exists('json', $options) && array_key_exists('body', $options)) {
