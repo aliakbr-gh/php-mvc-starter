@@ -13,6 +13,8 @@ final class Permission
         'sudo',
         'settings.view',
         'settings.update',
+        'email-settings.view',
+        'email-settings.update',
         'logs.view',
         'rate-limits.view',
         'rate-limits.update',

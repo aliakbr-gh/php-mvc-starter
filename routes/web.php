@@ -13,6 +13,7 @@ use App\Controllers\ActivityLogController;
 use App\Controllers\ProfileController;
 use App\Controllers\HealthController;
 use App\Controllers\ExternalApiController;
+use App\Controllers\CommunicationController;
 
 $router->get('/health', [HealthController::class, 'index']);
 $router->get('/external-api/posts', [ExternalApiController::class, 'posts']);
@@ -53,6 +54,13 @@ $router->post('/permissions/destroy', [PermissionController::class, 'destroy'], 
 
 $router->get('/app-settings', [AppSettingController::class, 'index'], ['auth', 'permission:settings.view']);
 $router->post('/app-settings', [AppSettingController::class, 'update'], ['auth', 'permission:settings.update']);
+$router->get('/email-settings', [CommunicationController::class, 'settings'], ['auth', 'permission:email-settings.view']);
+$router->post('/email-settings', [CommunicationController::class, 'updateSettings'], ['auth', 'permission:email-settings.update']);
+$router->get('/test-email-sms', [CommunicationController::class, 'legacyCommunicationPage'], ['auth', 'permission:email.view']);
+$router->get('/send-email', [CommunicationController::class, 'emailPage'], ['auth', 'permission:email.view']);
+$router->post('/send-email', [CommunicationController::class, 'sendEmail'], ['auth', 'permission:email.send']);
+$router->get('/send-sms', [CommunicationController::class, 'smsPage'], ['auth', 'permission:sms.view']);
+$router->post('/send-sms', [CommunicationController::class, 'openWhatsApp'], ['auth', 'permission:sms.send']);
 
 $router->get('/logs', [LogController::class, 'index'], ['auth', 'permission:logs.view']);
 $router->get('/activity-logs', [ActivityLogController::class, 'index'], ['auth', 'permission:activity-logs.view']);

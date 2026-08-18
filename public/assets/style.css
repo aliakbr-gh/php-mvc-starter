@@ -1110,6 +1110,44 @@ tbody tr:hover td {
     gap: 20px;
 }
 
+.communication-service-picker {
+    max-width: 520px;
+    margin-bottom: 20px;
+}
+
+.communication-settings-grid {
+    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.communication-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.communication-card-heading h2,
+.communication-card-heading p {
+    margin-top: 0;
+}
+
+.compact-checkbox {
+    flex: 0 0 auto;
+    min-width: 112px;
+}
+
+.communication-inline-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 120px;
+    gap: 14px;
+}
+
+.communication-save-actions {
+    margin-top: 20px;
+}
+
 .settings-grid h2,
 .subheading h2 {
     margin-bottom: 8px;
@@ -1523,6 +1561,10 @@ tbody tr:hover td {
     }
 
     .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .communication-inline-fields {
         grid-template-columns: 1fr;
     }
 

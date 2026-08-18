@@ -1,0 +1,19 @@
+{
+    "active_transport": "gmail",
+    "gmail": {
+        "enabled": true,
+        "email": "",
+        "app_password": "",
+        "from_name": ""
+    },
+    "smtp": {
+        "enabled": true,
+        "host": "",
+        "port": 587,
+        "encryption": "tls",
+        "username": "",
+        "password": "",
+        "from_email": "",
+        "from_name": ""
+    }
+}

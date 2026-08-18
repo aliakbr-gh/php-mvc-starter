@@ -9,6 +9,13 @@ $systemSettingsActive = str_contains($currentPath, '/app-settings')
     || str_contains($currentPath, '/logs')
     || str_contains($currentPath, '/rate-limits')
     || str_contains($currentPath, '/database-backup');
+$emailSmsActive = str_contains($currentPath, '/email-settings')
+    || str_contains($currentPath, '/send-email')
+    || str_contains($currentPath, '/send-sms')
+    || str_contains($currentPath, '/test-email-sms');
+$emailSmsVisible = hasPermission('email-settings.view')
+    || hasPermission('email.view')
+    || hasPermission('sms.view');
 $userManagementVisible = hasPermission('users.view')
     || hasPermission('roles.view')
     || hasRole('product-owner', 'admin');
@@ -132,6 +139,33 @@ $activityLogsActive = str_contains($currentPath, '/activity-logs');
                 >
                     Activity Logs
                 </a>
+            <?php endif; ?>
+
+            <?php if ($emailSmsVisible): ?>
+                <div class="nav-group">
+                    <button
+                        class="nav-group-toggle <?= $emailSmsActive ? 'is-active' : '' ?>"
+                        type="button"
+                        data-nav-group-toggle
+                        aria-expanded="<?= $emailSmsActive ? 'true' : 'false' ?>"
+                    >
+                        <span>Email and SMS</span>
+                        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true">
+                            <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="nav-group-items <?= $emailSmsActive ? 'is-open' : '' ?>">
+                        <?php if (hasPermission('email-settings.view')): ?>
+                            <a class="nav-link <?= str_contains($currentPath, '/email-settings') ? 'is-active' : '' ?>" href="<?= url('email-settings') ?>">Email Settings</a>
+                        <?php endif; ?>
+                        <?php if (hasPermission('email.view')): ?>
+                            <a class="nav-link <?= str_contains($currentPath, '/send-email') ? 'is-active' : '' ?>" href="<?= url('send-email') ?>">Send Email</a>
+                        <?php endif; ?>
+                        <?php if (hasPermission('sms.view')): ?>
+                            <a class="nav-link <?= str_contains($currentPath, '/send-sms') ? 'is-active' : '' ?>" href="<?= url('send-sms') ?>">Send SMS</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
             <?php endif; ?>
 
             <?php if ($systemSettingsVisible): ?>

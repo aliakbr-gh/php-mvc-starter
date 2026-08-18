@@ -110,7 +110,13 @@ INSERT INTO permissions (id, slug, name) VALUES
     (19, 'rate-limits.update', 'Update rate limits'),
     (20, 'database-backup.view', 'View database backups'),
     (21, 'database-backup.download', 'Download database backups'),
-    (22, 'activity-logs.view', 'View activity logs');
+    (22, 'activity-logs.view', 'View activity logs'),
+    (23, 'email.view', 'View email sender'),
+    (24, 'email.send', 'Send email'),
+    (25, 'sms.view', 'View SMS sender'),
+    (26, 'sms.send', 'Send SMS messages'),
+    (27, 'email-settings.view', 'View email settings'),
+    (28, 'email-settings.update', 'Update email settings');
 
 -- Product Owner receives sudo, which grants every system capability.
 INSERT INTO role_permissions (role_id, permission_id) VALUES
@@ -129,7 +135,11 @@ INSERT INTO role_permissions (role_id, permission_id) VALUES
     (2, 10),
     (2, 20),
     (2, 21),
-    (2, 22);
+    (2, 22),
+    (2, 23),
+    (2, 24),
+    (2, 25),
+    (2, 26);
 
 INSERT INTO users (id, name, username, password, role_id, is_active, session_version) VALUES
     (

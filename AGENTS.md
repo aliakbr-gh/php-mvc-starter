@@ -66,6 +66,7 @@ Every user record has `is_active` and `session_version`:
 
 - `sudo`
 - `settings.view`, `settings.update`
+- `email-settings.view`, `email-settings.update`
 - `logs.view`
 - `rate-limits.view`, `rate-limits.update`
 - `permissions.view`, `permissions.create`, `permissions.update`, `permissions.delete`
@@ -74,6 +75,14 @@ Database backup permissions are assignable by design:
 
 - `database-backup.view`: page/menu/dashboard visibility and page route.
 - `database-backup.download`: all three download endpoints and controls.
+
+Communication permissions:
+
+- `email.view`: Email and SMS menu visibility and Send Email page route.
+- `email.send`: Send Email submission.
+- `sms.view`: Email and SMS menu visibility and Send SMS page route.
+- `sms.send`: WhatsApp message redirect submission.
+- `email-settings.view`, `email-settings.update`: protected email credential configuration, available only through `sudo`.
 
 The Permissions index route is explicitly available to Product Owner and Admin. Permission mutation routes remain `sudo`-only.
 

@@ -1,6 +1,6 @@
 # PHP MVC Starter
 
-A framework-free PHP 8 MVC administration starter with authentication, role-based access control, activity and request logging, configurable rate limiting, application branding, and database/upload backups. It runs without Composer dependencies and supports MAMP, standard Apache hosting, and subfolder installations.
+A framework-free PHP 8 MVC administration starter with authentication, role-based access control, activity and request logging, configurable rate limiting, application branding, email delivery, WhatsApp message links, and database/upload backups. It runs without Composer dependencies and supports MAMP, standard Apache hosting, and subfolder installations.
 
 ## Requirements
 
@@ -9,6 +9,24 @@ A framework-free PHP 8 MVC administration starter with authentication, role-base
 - Apache with `mod_rewrite`
 - PHP extensions: `curl`, `mysqli`, `json`, and `zip`
 - Write access to `storage/` and `public/uploads/`
+
+## Email and WhatsApp modules
+
+Email delivery is configured at `/email-settings`. Gmail and generic SMTP profiles are stored independently, can each be enabled or disabled, and can be selected as the active transport at any time. Gmail uses `smtp.gmail.com` with a Google app password. Generic SMTP supports STARTTLS, implicit SSL/TLS, or an unencrypted connection. Credentials are stored in `storage/config/email-settings.json`, which the application restricts to the owning system user where supported; keep `storage/` outside direct web access and protect filesystem backups.
+
+Use `Core\EmailService` from controllers or other services:
+
+```php
+(new \Core\EmailService())->send($recipient, $subject, $plainTextMessage);
+```
+
+`Core\WhatsAppService` creates a WhatsApp URL with a receiver number and prefilled message. WhatsApp requires the user to confirm the final send:
+
+```php
+$url = (new \Core\WhatsAppService())->messageUrl($internationalNumber, $message);
+```
+
+Authenticated users with `email.view` or `sms.view` can open the corresponding sender page; submissions require `email.send` or `sms.send`. Email credential configuration uses the protected `email-settings.view` and `email-settings.update` permissions. The former `/test-email-sms` URL redirects to `/send-email` for compatibility.
 
 ## Quick start with MAMP
 
@@ -147,6 +165,7 @@ Protected system permissions do not appear in Assign Permissions:
 
 - `sudo`
 - `settings.view`, `settings.update`
+- `email-settings.view`, `email-settings.update`
 - `logs.view`
 - `rate-limits.view`, `rate-limits.update`
 - `permissions.view`, `permissions.create`, `permissions.update`, `permissions.delete`
@@ -155,6 +174,12 @@ Database backup access is intentionally assignable:
 
 - `database-backup.view` opens the backup page.
 - `database-backup.download` authorizes each SQL/ZIP download endpoint.
+
+Communication sending is assignable independently of protected credential configuration:
+
+- `email.view` opens the Send Email page; `email.send` authorizes delivery.
+- `sms.view` opens the Send SMS page; `sms.send` authorizes the WhatsApp redirect.
+- `email-settings.view` and `email-settings.update` protect email service credentials and are available through `sudo` only.
 
 The Product Owner and Admin roles cannot be edited, deleted, or have permissions reassigned through the UI. Accounts currently assigned to either built-in role cannot be edited or deleted from User Management.
 
@@ -165,6 +190,7 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Roles:** searchable, paginated custom-role management and permission assignment.
 - **Permissions:** Admin/Product Owner read access; mutation requires `sudo`.
 - **Application Settings:** branding name, logo, and favicon stored in JSON/uploads.
+- **Email and SMS:** configurable Gmail/SMTP delivery plus WhatsApp message links, with separate view, send, and protected credential permissions.
 - **Request Logs:** daily JSON-lines request inspection with pagination.
 - **Activity Logs:** database-backed audit trail of authenticated actions.
 - **Rate Limits:** JSON-backed configuration plus database-backed, searchable tracked-IP state.
