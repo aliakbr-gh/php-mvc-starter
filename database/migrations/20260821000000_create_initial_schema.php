@@ -1,0 +1,89 @@
+<?php
+
+declare(strict_types=1);
+
+use Core\Migration;
+
+return new class implements Migration {
+    public function up(mysqli $database): void
+    {
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS roles (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                slug VARCHAR(100) NOT NULL UNIQUE,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS permissions (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(120) NOT NULL,
+                slug VARCHAR(120) NOT NULL UNIQUE,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS role_permissions (
+                role_id BIGINT UNSIGNED NOT NULL,
+                permission_id BIGINT UNSIGNED NOT NULL,
+                PRIMARY KEY (role_id, permission_id),
+                CONSTRAINT fk_role_permissions_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+                CONSTRAINT fk_role_permissions_permission FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS users (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                username VARCHAR(50) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                session_version BIGINT UNSIGNED NOT NULL DEFAULT 1,
+                role_id BIGINT UNSIGNED NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_users_role_id (role_id),
+                CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS activity_logs (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                user_id BIGINT UNSIGNED NULL,
+                user_name VARCHAR(100) NOT NULL,
+                username VARCHAR(50) NOT NULL,
+                description VARCHAR(500) NOT NULL,
+                ip_address VARCHAR(45) NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_activity_logs_created_at (created_at),
+                INDEX idx_activity_logs_user_id (user_id),
+                CONSTRAINT fk_activity_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+        $database->query(
+            'CREATE TABLE IF NOT EXISTS rate_limit_entries (
+                ip_address VARCHAR(45) NOT NULL PRIMARY KEY,
+                window_started_at DECIMAL(16,6) NOT NULL,
+                request_count INT UNSIGNED NOT NULL DEFAULT 0,
+                violations INT UNSIGNED NOT NULL DEFAULT 0,
+                last_violation_window BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                paused_until BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                blocked TINYINT(1) NOT NULL DEFAULT 0,
+                last_request_at BIGINT UNSIGNED NOT NULL DEFAULT 0,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_rate_limit_entries_cleanup (blocked, last_request_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci'
+        );
+    }
+
+    public function down(mysqli $database): void
+    {
+        throw new RuntimeException(
+            'The initial schema baseline cannot be rolled back because it may contain production data.'
+        );
+    }
+};

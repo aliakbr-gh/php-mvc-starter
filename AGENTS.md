@@ -13,9 +13,13 @@ This repository is a small, framework-free PHP 8 MVC administration starter. It 
 - Local database defaults: MySQL at `127.0.0.1:3305`, database `mvc_db`.
 - Session idle timeout: `APP_SESSION_LIFETIME`, default 1800 seconds, minimum 60.
 - PHP seeder: `php database/seed.php`.
+- Migration CLI: `php migrate.php [migrate|status|rollback]`.
+- Scaffold CLI: `php make [migration|controller|model] <name>`; multi-word names are normalized to lowercase underscores where applicable.
 - Browser URL is normally `http://localhost/php-mvc-starter` under MAMP.
 
 Do not run either seeder merely to validate a change. Both are destructive reset tools. A seed run requires clear user intent to reset data.
+
+Production schema changes belong in timestamped files under `database/migrations`. Never edit or rename an applied migration; append a new one. Test both directions on a disposable database, and take a backup before production migration or rollback. Do not run a migration or rollback merely to validate code because those commands change the configured database.
 
 ## Architecture rules
 
@@ -23,6 +27,7 @@ Do not run either seeder merely to validate a change. Both are destructive reset
 - Models in `app/Models` own parameterized MySQL queries.
 - Views in `app/Views` contain presentation logic only and render through `app/Views/layouts/app.php`.
 - Framework services and global helpers live in `core`.
+- Migration contracts and execution live in `core/Migration.php` and `core/MigrationRunner.php`; migration files contain schema changes only.
 - All routes and middleware are declared in `routes/web.php`.
 - Browser assets live in `public/assets`; uploads live in `public/uploads`.
 - Mutable JSON/log state lives under `storage`, never in source files.
@@ -106,12 +111,14 @@ Whenever permissions change:
 3. Update the Admin assignments in `database/seed.sql` if the permission is assignable.
 4. Update `$productOwnerOnlyPermissions` in `database/seed.php` and `Permission::PRODUCT_OWNER_ONLY` together when protection changes.
 5. Update README authorization documentation.
+6. Add a migration that inserts or updates the permission for existing installations, including the Admin assignment when it is assignable.
 
 Do not renumber existing SQL seed permission IDs unnecessarily. Append new IDs to avoid confusing reviews and references.
 
 ## Data and storage
 
 - Relational data: roles, permissions, role assignments, users, activity logs.
+- Schema history: `migrations`, managed only by `Core\MigrationRunner`.
 - Application branding: `storage/config/app-settings.json`.
 - Rate-limit configuration: `storage/config/rate-limit.json`.
 - Rate-limit state: `rate_limit_entries`, with one transactionally updated row per IP.

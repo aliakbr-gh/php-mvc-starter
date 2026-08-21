@@ -124,6 +124,8 @@ core/
   HttpClientResponse.php External response status, headers, body, and JSON access
   ExceptionHandler.php Production-safe error handling and logging
 database/
+  migrate.php         CLI migration runner (apply, status, rollback)
+  migrations/         Ordered, checksum-protected schema changes
   schema.sql          Tables only; no roles, permissions, or users
   seed.php            CLI full database reset using current configuration
   seed.sql            phpMyAdmin/shared-hosting full table reset
@@ -262,6 +264,63 @@ curl -X POST http://localhost/php-mvc-starter/api/v1/open \
   -d '{"key":"YOUR_PRIVATE_KEY","payload":{"example":true}}'
 ```
 
+## Database migrations
+
+Production schema changes are managed by timestamped PHP migrations in `database/migrations/`. The runner creates a `migrations` history table, applies pending files in filename order, groups each run into a batch, and uses a MySQL advisory lock to prevent concurrent deployments. It also stores a SHA-256 checksum and refuses to migrate if an already-applied file was changed or removed.
+
+Inspect and apply migrations from the project root:
+
+```bash
+php migrate.php status
+php migrate.php migrate
+```
+
+Roll back the most recently applied batch only after taking a backup and reviewing each migration's `down()` method:
+
+```bash
+php migrate.php rollback
+```
+
+Create future migration files with the root-level maker. Names containing spaces are normalized to lowercase underscores:
+
+```bash
+php make migration add_orders_table
+php make migration Add Order Status
+```
+
+The second example creates a file shaped like `database/migrations/20260922_1222_add_order_status.php`. Every generated file returns a `Core\Migration` implementation:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Core\Migration;
+
+return new class implements Migration {
+    public function up(mysqli $database): void
+    {
+        $database->query('CREATE TABLE orders (...)');
+    }
+
+    public function down(mysqli $database): void
+    {
+        $database->query('DROP TABLE IF EXISTS orders');
+    }
+};
+```
+
+Never edit or rename an applied migration; add a new migration instead. MySQL implicitly commits most DDL, so a failed migration may have partially changed the schema even though it was not recorded. Write operations in a safe order, make them restartable where practical, inspect the database after any failure, and test both `up()` and `down()` against a disposable database before production. Migrations change schema only and do not create default users.
+
+The initial migration can adopt an existing seeded installation because its table creation statements use `IF NOT EXISTS`. Its `down()` method intentionally refuses to drop the baseline tables, protecting adopted production data. After deploying this feature to an existing environment, run `status`, take a database backup, then run `migrate` once to establish migration history.
+
+The maker also scaffolds strict, autoloadable controllers and models while refusing to overwrite existing files:
+
+```bash
+php make controller Order
+php make model Order
+```
+
 ## Database and seeds
 
 The relational schema contains:
@@ -271,6 +330,8 @@ The relational schema contains:
 - `role_permissions`
 - `users`, including active status and a password-session version
 - `activity_logs`
+- `rate_limit_entries`
+- `migrations` after the migration runner is first used
 
 Use `database/schema.sql` only when you want empty tables. Use one complete seed method—not both—for a fresh test environment:
 
@@ -314,7 +375,7 @@ Backup filenames use a safe lowercase slug generated from the current dynamic ap
 
 ## Shared hosting deployment
 
-Upload the project to the domain document root, retaining `.htaccess`. Configure `DB_*`, `APP_ENV=production`, `APP_DEBUG=0`, `APP_TIMEZONE`, and optionally `APP_URL`. Ensure Apache rewrite support and PHP write permission for `storage/` and `public/uploads/`. Select the hosting database in phpMyAdmin and import `database/seed.sql` once. Hosting database names and usernames are commonly account-prefixed; use the exact values from the hosting control panel.
+Upload the project to the domain document root, retaining `.htaccess`. Configure `DB_*`, `APP_ENV=production`, `APP_DEBUG=0`, `APP_TIMEZONE`, and optionally `APP_URL`. Ensure Apache rewrite support and PHP write permission for `storage/` and `public/uploads/`. For an initial installation, select the hosting database in phpMyAdmin and import `database/seed.sql` once, then run `php migrate.php migrate` when shell access is available to establish migration history. For later deployments, back up the database and run `php migrate.php status` followed by `php migrate.php migrate`; never rerun a seeder on production. Hosting database names and usernames are commonly account-prefixed; use the exact values from the hosting control panel.
 
 ## Verification checklist
 
