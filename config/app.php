@@ -1,6 +1,6 @@
 <?php
 
-$appName = 'PHP MVC Starter';
+$appName = 'PHPMVC';
 $appSlug = 'php-mvc-starter';
 $documentRoot = realpath((string) ($_SERVER['DOCUMENT_ROOT'] ?? ''));
 $projectRoot = realpath(dirname(__DIR__));

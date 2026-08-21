@@ -1,4 +1,4 @@
--- PHP MVC Starter complete database reset for phpMyAdmin/shared hosting.
+-- PHPMVC complete database reset for phpMyAdmin/shared hosting.
 -- Select the target database in phpMyAdmin before importing this file.
 -- WARNING: This deletes all existing application tables and their data.
 

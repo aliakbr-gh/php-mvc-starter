@@ -6,14 +6,14 @@ This repository is a small, framework-free PHP 8 MVC administration starter. It 
 
 ## Runtime and entry points
 
-- Workspace root: `/Applications/MAMP/htdocs/lab360`
+- Workspace root: `/Applications/MAMP/htdocs/php-mvc-starter`
 - Web entry: `public/index.php`; root `index.php` forwards to it.
 - Bootstrap: `bootstrap.php`
 - Routes: `routes/web.php`
-- Local database defaults: MySQL at `127.0.0.1:3305`, database `lab360_db`.
+- Local database defaults: MySQL at `127.0.0.1:3305`, database `mvc_db`.
 - Session idle timeout: `APP_SESSION_LIFETIME`, default 1800 seconds, minimum 60.
 - PHP seeder: `php database/seed.php`.
-- Browser URL is normally `http://localhost/lab360` under MAMP.
+- Browser URL is normally `http://localhost/php-mvc-starter` under MAMP.
 
 Do not run either seeder merely to validate a change. Both are destructive reset tools. A seed run requires clear user intent to reset data.
 

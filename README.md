@@ -1,4 +1,4 @@
-# PHP MVC Starter
+# PHPMVC
 
 A framework-free PHP 8 MVC administration starter with authentication, role-based access control, activity and request logging, configurable rate limiting, application branding, email delivery, WhatsApp message links, and database/upload backups. It runs without Composer dependencies and supports MAMP, standard Apache hosting, and subfolder installations.
 
@@ -39,7 +39,7 @@ Authenticated users with `email.view` or `sms.view` can open the corresponding s
    php database/seed.php
    ```
 
-5. Open the detected project URL, typically `http://localhost/lab360`.
+5. Open the detected project URL, typically `http://localhost/php-mvc-starter`.
 6. Sign in with one of the seeded accounts and change its password immediately:
 
    | Role | Username | Password |
@@ -74,7 +74,7 @@ DB_USERNAME
 DB_PASSWORD
 ```
 
-Local defaults target MAMP on macOS (`127.0.0.1:3305`, database `lab360_db`, username/password `root`). Do not commit production credentials.
+Local defaults target MAMP on macOS (`127.0.0.1:3305`, database `mvc_db`, username/password `root`). Do not commit production credentials.
 
 API environment variables:
 
@@ -296,7 +296,7 @@ These paths must be writable by PHP and inaccessible from the web. Apache denial
 
 The responsive sidebar uses an x-axis `translate3d` transition. Empty permission-dependent table action cells render an em dash so table layout remains stable.
 
-Backup filenames use a safe lowercase slug generated from the current dynamic application name. For example, changing the Application Settings name to `Lab 360 Portal` produces filenames beginning with `lab-360-portal-`. The stable configured application slug continues to identify sessions and browser theme storage.
+Backup filenames use a safe lowercase slug generated from the current dynamic application name. For example, the `PHPMVC` application name produces filenames beginning with `phpmvc-`. The stable configured application slug continues to identify sessions and browser theme storage.
 
 ## Security notes
 

@@ -33,7 +33,7 @@ function client_ip(): string
 function appSettings(): array
 {
     return $GLOBALS['app_settings'] ?? [
-        'app_name' => (string) ($GLOBALS['config']['name'] ?? 'PHP MVC Starter'),
+        'app_name' => (string) ($GLOBALS['config']['name'] ?? 'PHPMVC'),
         'logo' => '',
         'favicon' => '',
     ];
