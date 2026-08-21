@@ -196,7 +196,7 @@ The Product Owner and Admin roles cannot be edited, deleted, or have permissions
 - **Request Logs:** daily JSON-lines request inspection with pagination.
 - **Activity Logs:** database-backed audit trail of authenticated actions.
 - **Rate Limits:** JSON-backed configuration plus database-backed, searchable tracked-IP state.
-- **Database Backup:** database SQL, uploads ZIP, or full ZIP downloads.
+- **Database Backup:** database SQL, uploads ZIP, or full ZIP backups as downloads or direct Google Drive uploads.
 - **Health:** public server/database health response.
 - **Profile:** current-account details and password change.
 - **API:** versioned JSON requests/responses, user-based native HS256 JWT authentication, and controller-owned JSON request-key verification.
@@ -345,11 +345,25 @@ or import `database/seed.sql` into an already selected database. Both seed paths
 
 - `storage/config/app-settings.json`: display name, logo, favicon.
 - `storage/config/rate-limit.json`: enabled flag and throttle thresholds.
+- `storage/config/google-drive-settings.json`: Google OAuth client credentials, refresh token, and optional destination folder; restricted to the owning system user where supported.
 - `storage/cache/rate-limit-state.json`: IP counters, violations, pauses, blocks.
 - `storage/logs/YYYY-MM-DD.log`: one request JSON object per line.
 - `storage/logs/errors-YYYY-MM-DD.log`: exception details.
 
 These paths must be writable by PHP and inaccessible from the web. Apache denial rules are included. Do not treat these files as source-controlled fixtures during normal development.
+
+## Google Drive backups
+
+The Database Backup page can stream database, uploads, and full backups directly to Google Drive without loading the complete archive into PHP memory. Configuration and account connection require `sudo`; users with `database-backup.download` can trigger an upload after Drive is connected.
+
+1. Enable the Google Drive API in a Google Cloud project.
+2. Configure the OAuth consent screen and add the `drive.file` scope.
+3. Create an OAuth 2.0 Web application client.
+4. Copy the exact redirect URI displayed on the Database Backup page into the client's authorized redirect URIs.
+5. Save the client ID and secret, then select **Connect Google Drive** and grant access.
+6. Optionally enter a destination folder ID. Leave it blank to upload to My Drive.
+
+The integration requests offline access and stores the resulting refresh token in protected file-backed settings. Keep `storage/` out of web access and out of publicly shared backups. Changing either OAuth credential disconnects the existing Google account and requires authorization again.
 
 ## Frontend behavior
 

@@ -73,3 +73,8 @@ $router->get('/database-backup', [DatabaseBackupController::class, 'index'], ['a
 $router->get('/database-backup/database', [DatabaseBackupController::class, 'downloadDatabase'], ['auth', 'permission:database-backup.download']);
 $router->get('/database-backup/uploads', [DatabaseBackupController::class, 'downloadUploads'], ['auth', 'permission:database-backup.download']);
 $router->get('/database-backup/full', [DatabaseBackupController::class, 'downloadFull'], ['auth', 'permission:database-backup.download']);
+$router->post('/database-backup/google/settings', [DatabaseBackupController::class, 'saveGoogleSettings'], ['auth', 'permission:sudo']);
+$router->get('/database-backup/google/connect', [DatabaseBackupController::class, 'connectGoogle'], ['auth', 'permission:sudo']);
+$router->get('/database-backup/google/callback', [DatabaseBackupController::class, 'googleCallback'], ['auth', 'permission:sudo']);
+$router->post('/database-backup/google/disconnect', [DatabaseBackupController::class, 'disconnectGoogle'], ['auth', 'permission:sudo']);
+$router->post('/database-backup/google/upload', [DatabaseBackupController::class, 'uploadGoogle'], ['auth', 'permission:database-backup.download']);

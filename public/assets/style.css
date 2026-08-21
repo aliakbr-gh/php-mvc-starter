@@ -1225,6 +1225,129 @@ tbody tr:hover td {
     overflow-wrap: anywhere;
 }
 
+.drive-settings-card {
+    margin-top: 20px;
+}
+
+.drive-settings-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.drive-settings-heading h2 {
+    margin: 3px 0 5px;
+    font-size: 1.15rem;
+}
+
+.drive-settings-heading p,
+.drive-viewer-message {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: .86rem;
+}
+
+.drive-eyebrow {
+    color: var(--color-primary);
+    font-size: .7rem;
+    font-weight: 750;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.drive-settings-layout {
+    display: grid;
+    grid-template-columns: minmax(250px, .75fr) minmax(0, 1.25fr);
+    gap: 24px;
+    padding-top: 22px;
+}
+
+.drive-setup-guide {
+    padding: 18px;
+    background: var(--color-surface-soft);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.drive-setup-guide h3 {
+    margin: 0 0 12px;
+    font-size: .95rem;
+}
+
+.drive-setup-guide ol {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--color-body);
+    font-size: .82rem;
+}
+
+.drive-setup-guide li + li {
+    margin-top: 9px;
+}
+
+.drive-setup-guide a {
+    color: var(--color-primary);
+    font-weight: 650;
+}
+
+.drive-guide-note {
+    margin: 16px 0 0;
+    padding-top: 14px;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    font-size: .78rem;
+}
+
+.drive-settings-form {
+    display: grid;
+    gap: 16px;
+}
+
+.drive-settings-form label {
+    margin: 0;
+}
+
+.drive-settings-form small code {
+    color: var(--color-primary);
+}
+
+.drive-redirect-uri {
+    display: grid;
+    gap: 6px;
+    padding: 14px;
+    background: var(--color-surface-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.drive-redirect-uri span {
+    color: var(--color-text);
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.drive-redirect-uri code {
+    color: var(--color-primary);
+    overflow-wrap: anywhere;
+}
+
+.drive-settings-actions {
+    flex-wrap: wrap;
+}
+
+.drive-disconnect {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.drive-viewer-message {
+    padding-top: 18px;
+}
+
 .subheading {
     margin: 28px 0 14px;
 }
@@ -1569,6 +1692,14 @@ tbody tr:hover td {
     }
 
     .backup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .drive-settings-heading {
+        flex-direction: column;
+    }
+
+    .drive-settings-layout {
         grid-template-columns: 1fr;
     }
 

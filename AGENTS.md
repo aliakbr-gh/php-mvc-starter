@@ -139,6 +139,7 @@ Use `Core\JsonStore` for JSON state so locking/default behavior remains consiste
 - The mobile sidebar uses `translate3d` on the x-axis; preserve reduced-motion support.
 - Maintain both light and dark theme compatibility through tokens in `public/assets/theme.css`.
 - Backup filenames and their preview must use `appFilenameSlug()`, which derives from the file-backed dynamic application name. Do not use the stable configured slug for download filenames.
+- Google Drive backup credentials and refresh tokens live in `storage/config/google-drive-settings.json` through `Core\GoogleDriveSettings`. Configuration and OAuth connection routes are `sudo`-only; direct upload requires `database-backup.download`. Always delete temporary backup files after success or failure.
 
 ## Validation patterns
 
