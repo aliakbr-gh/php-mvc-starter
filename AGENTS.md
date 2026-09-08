@@ -150,6 +150,14 @@ Use `Core\JsonStore` for JSON state so locking/default behavior remains consiste
 - Log meaningful authenticated mutations with `Core\ActivityLogger`.
 - File upload changes must use `Core\FileUploader` and clean up superseded/failed uploads safely.
 
+## Code formatting
+
+- Write source code using conventional multiline formatting and consistent indentation.
+- Never minify PHP, HTML, CSS, JavaScript, JSON, SQL, or Markdown source files.
+- Put statements, HTML elements, CSS declarations, and logical code blocks on appropriate separate lines.
+- Follow the formatting style of nearby well-formatted files unless it conflicts with these rules.
+- Preserve readable multiline formatting whenever creating or modifying files.
+
 ## Verification
 
 At minimum, run PHP syntax checks for every changed PHP file and `git diff --check`. For broad changes, run:
