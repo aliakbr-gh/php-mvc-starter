@@ -158,6 +158,12 @@ Use `Core\JsonStore` for JSON state so locking/default behavior remains consiste
 - Follow the formatting style of nearby well-formatted files unless it conflicts with these rules.
 - Preserve readable multiline formatting whenever creating or modifying files.
 
+## Naming conventions
+
+- Use clear, descriptive variable names that communicate their purpose.
+- Avoid vague or single-letter names such as `$m`, `$r`, `$x`, or `$data`, except for universally understood names in very small scopes, such as a simple loop index.
+- When modifying nearby code, improve unclear variable names when it is safe and directly relevant to the change.
+
 ## Verification
 
 At minimum, run PHP syntax checks for every changed PHP file and `git diff --check`. For broad changes, run:
