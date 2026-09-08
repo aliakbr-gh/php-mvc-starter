@@ -64,7 +64,7 @@ Authenticated users with `email.view` or `sms.view` can open the corresponding s
 - `request_logging`: enables the JSON-lines request logger.
 - `bcrypt_cost`: password hashing cost.
 
-`config/database.php` accepts these environment variables:
+`config/database.php` selects defaults using `APP_ENV` and accepts these environment variables as overrides:
 
 ```text
 DB_HOST
@@ -74,7 +74,7 @@ DB_USERNAME
 DB_PASSWORD
 ```
 
-Local defaults target MAMP on macOS (`127.0.0.1:3305`, database `mvc_db`, username/password `root`). Do not commit production credentials.
+The `development` profile targets local MySQL (MAMP port `3305` on macOS, otherwise `3306`) with database `mvc_db` and username/password `root`. The `testing` profile uses the same local connection with database `mvc_db_test`. The `production` profile defaults to `127.0.0.1:3306` but intentionally leaves the database name and credentials empty; provide them through `DB_*` variables. Unknown `APP_ENV` values also use the safe production defaults. Aliases `local`, `test`, and `prod` map to `development`, `testing`, and `production` respectively. Do not commit production credentials.
 
 API environment variables:
 
