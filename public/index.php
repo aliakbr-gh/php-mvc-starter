@@ -6,6 +6,7 @@ use Core\Router;
 use Core\RateLimiter;
 use Core\RequestLogger;
 use Core\API\APIContext;
+use Core\API\CORS;
 
 $requestStartedAt = microtime(true);
 require dirname(__DIR__) . '/bootstrap.php';
@@ -17,6 +18,7 @@ if ($basePath !== '' && str_starts_with($path, $basePath)) {
 }
 
 APIContext::setRequestPath($path);
+CORS::apply();
 RequestLogger::register($requestStartedAt);
 RateLimiter::enforce();
 

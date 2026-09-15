@@ -83,7 +83,12 @@ APP_JWT_SECRET       Required random secret of at least 32 characters
 APP_API_ISSUER       Token issuer; defaults to the application slug
 APP_API_AUDIENCE     Token audience; defaults to <application-slug>-api
 APP_API_TOKEN_LIFETIME Access-token lifetime in seconds; defaults to 900
+APP_API_CORS_ORIGINS Comma-separated browser origins allowed to call the API
 ```
+
+When `APP_API_CORS_ORIGINS` is not set, the allowlist contains the local Vite
+origins on port 5173. Set an explicit comma-separated allowlist for deployed
+frontends. Wildcard origins are not used.
 
 Generate a production signing secret with `php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"` and keep it outside source control. Applications consuming the API receive only their client credentials; they never receive the signing secret.
 
@@ -92,10 +97,11 @@ Generate a production signing secret with `php -r "echo bin2hex(random_bytes(32)
 1. Apache routes requests through the root or public `.htaccess` file to `public/index.php`.
 2. `bootstrap.php` loads configuration, helpers, PSR-4-style autoloading, secure session settings, exception handling, and file-backed application settings.
 3. For an authenticated browser session, bootstrap verifies idle expiry, active account status, and the database-backed session version.
-4. `RequestLogger` registers a shutdown logger and `RateLimiter` checks the client IP.
-5. `routes/web.php` and `routes/api.php` register browser and versioned API routes.
-6. `Core\Router` normalizes the path, verifies CSRF on browser POST requests, runs middleware, and invokes the controller. Stateless API routes authenticate with bearer tokens instead of browser CSRF tokens.
-7. Controllers validate input, call models/services, set flash messages, and render a view through the shared layout.
+4. API requests apply the configured CORS allowlist and answer valid preflight requests before dispatch.
+5. `RequestLogger` registers a shutdown logger and `RateLimiter` checks the client IP.
+6. `routes/web.php` and `routes/api.php` register browser and versioned API routes.
+7. `Core\Router` normalizes the path, verifies CSRF on browser POST requests, runs middleware, and invokes the controller. Stateless API routes authenticate with bearer tokens instead of browser CSRF tokens.
+8. Controllers validate input, call models/services, set flash messages, and render a view through the shared layout.
 8. The layout supplies navigation, the reusable page loader, toast messages, responsive styling, and theme behavior.
 
 ## Architecture

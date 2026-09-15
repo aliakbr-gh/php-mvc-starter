@@ -1,0 +1,2 @@
+{"timestamp":"2026-09-10T14:22:19+05:00","method":"GET","uri":"/php-mvc-starter/dashboard","status":302,"ip":"::1","user_id":null,"duration_ms":33.52}
+{"timestamp":"2026-09-10T14:22:19+05:00","method":"GET","uri":"/php-mvc-starter/login","status":200,"ip":"::1","user_id":null,"duration_ms":16.61}

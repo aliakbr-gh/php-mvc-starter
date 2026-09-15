@@ -6,6 +6,14 @@ $documentRoot = realpath((string) ($_SERVER['DOCUMENT_ROOT'] ?? ''));
 $projectRoot = realpath(dirname(__DIR__));
 $detectedBaseUrl = '';
 $environment = getenv('APP_ENV') ?: 'development';
+$configuredCorsOrigins = array_values(array_filter(array_map(
+    'trim',
+    explode(',', (string) (getenv('APP_API_CORS_ORIGINS') ?: ''))
+)));
+$defaultCorsOrigins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+];
 
 if ($documentRoot !== false && $projectRoot !== false && str_starts_with($projectRoot, $documentRoot)) {
     $detectedBaseUrl = '/' . trim(str_replace(DIRECTORY_SEPARATOR, '/', substr($projectRoot, strlen($documentRoot))), '/');
@@ -33,5 +41,6 @@ return [
         'audience' => getenv('APP_API_AUDIENCE') ?: $appSlug . '-api',
         'jwt_secret' => getenv('APP_JWT_SECRET') ?: 'f7a92c50e6d84bdfa2439185c874a9588e731bf59182572173f897e935baba12',
         'token_lifetime' => max(60, (int) (getenv('APP_API_TOKEN_LIFETIME') ?: 900)),
+        'cors_origins' => $configuredCorsOrigins === [] ? $defaultCorsOrigins : $configuredCorsOrigins,
     ],
 ];
